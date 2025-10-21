@@ -1,14 +1,20 @@
+// src/app/api.js
+
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://lightyellow-kingfisher-686522.hostingersite.com/api/", 
+  // UPDATE baris ini dengan base URL yang baru
+  baseURL: "https://soreweb.sejiwahomecare.com/api/", 
   headers: { "Content-Type": "application/json" }
 });
 
-// kalau butuh auth token, tinggal tambahin interceptor
+// Interceptor ini sudah benar, tidak perlu diubah.
+// Ini akan otomatis melampirkan token ke setiap request SETELAH login berhasil.
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
