@@ -1,26 +1,57 @@
-import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 
 export default function DashboardLayout() {
-  return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 text-white p-4">
-        <h2 className="font-bold mb-6">Admin Dashboard</h2>
-        <nav className="flex flex-col gap-2">
-          <Link to="/dashboard">Home</Link>
-          <Link to="/dashboard/users">Users</Link>
-          <Link to="/dashboard/services">Services</Link>
-          <Link to="/dashboard/partnerships">Partnerships</Link>
-          <Link to="/dashboard/careers">Careers</Link>
-          <Link to="/dashboard/settings">Settings</Link>
-        </nav>
-      </aside>
+  const [isOpen, setIsOpen] = useState(true);
 
-      {/* Content */}
-      <main className="flex-1 p-6 bg-gray-100">
-        <Outlet />
-      </main>
+  // Cek ukuran layar saat load/resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsOpen(true); // Desktop selalu terbuka
+      } else {
+        setIsOpen(false); // Mobile default tertutup
+      }
+    };
+
+    handleResize(); // panggil saat pertama render
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleDrawer = () => setIsOpen((prev) => !prev);
+  const closeDrawer = () => {
+    if (window.innerWidth < 1024) {
+      // hanya auto-close kalau mobile
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <div
+      className={`drawer ${isOpen ? "drawer-open" : ""} min-h-screen bg-base-200`}
+    >
+      <input
+        id="my-drawer-2"
+        type="checkbox"
+        className="drawer-toggle"
+        checked={isOpen}
+        onChange={toggleDrawer}
+      />
+
+      {/* Main Content */}
+      <div className="drawer-content flex flex-col">
+        <Navbar toggleDrawer={toggleDrawer} />
+
+        <main className="flex-1 p-6 lg:p-8 bg-base-100 rounded-tl-2xl shadow-inner">
+          <Outlet />
+        </main>
+      </div>
+
+      {/* Sidebar */}
+      <Sidebar closeDrawer={closeDrawer} />
     </div>
   );
 }
