@@ -10,8 +10,8 @@ import { Toaster } from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
-  const [email, setEmail] = useState("superadmin@gmail.com");
-  const [password, setPassword] = useState("superadmin123");
+  const [email, setEmail] = useState("");    
+  const [password, setPassword] = useState("");
   const { handleLogin, loading } = useAuth();
 
   const onSubmit = (e) => {
@@ -70,7 +70,7 @@ export default function Login() {
                 <Mail className="absolute left-3 top-3 text-gray-400" size={18} />
                 <input
                   type="email"
-                  placeholder="superadmin@gmail.com"
+                  placeholder="Masukkan email"
                   className="input input-bordered w-full pl-10"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
