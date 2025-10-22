@@ -1,39 +1,25 @@
 import api from "../app/api";
 
-// GET - ambil daftar career (admin)
+// GET semua lowongan
 export const getCareers = async () => {
-  const res = await api.get("/admin/career");
-  return res.data;
+  const res = await api.get("/lowongan-karir");
+  return res.data.data; // sesuai struktur backend { message, data: [...] }
 };
 
-// POST - tambah career
+// CREATE lowongan
 export const createCareer = async (careerData) => {
-  const formData = new FormData();
-  formData.append("category_id", careerData.category_id);
-  formData.append("title", careerData.title);
-  formData.append("description", careerData.description);
-
-  const res = await api.post("/career", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = await api.post("/lowongan-karir", careerData);
   return res.data;
 };
 
-// PUT - update career
+// UPDATE lowongan
 export const updateCareer = async (id, careerData) => {
-  const formData = new FormData();
-  formData.append("category_id", careerData.category_id);
-  formData.append("title", careerData.title);
-  formData.append("description", careerData.description);
-
-  const res = await api.post(`/career/${id}?_method=PUT`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = await api.put(`/lowongan-karir/${id}`, careerData);
   return res.data;
 };
 
-// DELETE - hapus career
+// DELETE lowongan
 export const deleteCareer = async (id) => {
-  const res = await api.delete(`/career/${id}`);
+  const res = await api.delete(`/lowongan-karir/${id}`);
   return res.data;
 };
