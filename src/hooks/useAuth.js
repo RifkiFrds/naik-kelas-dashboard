@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { login } from "../services/authService";
+import { logout as logoutService } from "../services/userService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -11,8 +12,8 @@ export const useAuth = () => {
     setLoading(true);
     try {
       const res = await login(email, password);
-      if (res.token) {
-        localStorage.setItem("token", res.token);
+      if (res.access_token) {
+        localStorage.setItem("token", res.access_token);
         toast.success("Login berhasil 🎉");
         setTimeout(() => navigate("/dashboard"), 1200);
       } else {
@@ -28,5 +29,11 @@ export const useAuth = () => {
     }
   };
 
-  return { handleLogin, loading };
+  const handleLogout = async () => {
+    await logoutService();
+    toast.success("Berhasil logout 👋");
+    navigate("/login");
+  };
+
+  return { handleLogin, handleLogout, loading };
 };
