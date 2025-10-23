@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   // base url
-  baseURL: "https://lightyellow-kingfisher-686522.hostingersite.com/api/", 
+  baseURL: import.meta.env.VITE_API_BASE_URL, 
   headers: { "Content-Type": "application/json" }
 });
 
