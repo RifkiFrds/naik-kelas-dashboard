@@ -3,7 +3,7 @@ import api from "../app/api";
 // GET semua lowongan
 export const getCareers = async () => {
   const res = await api.get("/lowongan-karir");
-  return res.data.data; // sesuai struktur backend { message, data: [...] }
+  return res.data.data; // { message, data: [...] }
 };
 
 // CREATE lowongan

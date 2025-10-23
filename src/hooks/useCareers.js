@@ -12,7 +12,7 @@ export const useCareers = () => {
   const [loading, setLoading] = useState(true);
   const [newCareer, setNewCareer] = useState({
     posisi: "",
-    status: 1,
+    status: "dibuka", 
     deskripsi: "",
     url_cta: "",
   });
@@ -28,6 +28,7 @@ export const useCareers = () => {
       const data = await getCareers();
       setCareers(data);
     } catch (err) {
+      console.error(err);
       toast.error("Gagal memuat lowongan ❌");
     } finally {
       setLoading(false);
@@ -43,32 +44,52 @@ export const useCareers = () => {
       }
       await createCareer(newCareer);
       toast.success("Lowongan berhasil ditambahkan 🎉");
-      setNewCareer({ posisi: "", status: 1, deskripsi: "", url_cta: "" });
+      setNewCareer({
+        posisi: "",
+        status: "dibuka",
+        deskripsi: "",
+        url_cta: "",
+      });
       loadCareers();
     } catch (err) {
-      toast.error("Gagal menambah lowongan ❌");
+      console.error(err.response?.data || err);
+      toast.error(err.response?.data?.message || "Gagal menambah lowongan ❌");
     }
   };
 
-  // UPDATE
+  // TOGGLE STATUS
+  const handleToggleStatus = async (career) => {
+    try {
+      const newStatus = career.status === "dibuka" ? "ditutup" : "dibuka";
+      await updateCareer(career.id, { ...career, status: newStatus });
+      toast.success(`Status diubah menjadi ${newStatus.toUpperCase()} ✅`);
+      loadCareers();
+    } catch (err) {
+      console.error(err.response?.data || err);
+      toast.error("Gagal mengubah status ❌");
+    }
+  };
+
+  // UPDATE (Edit)
   const handleUpdate = async (id, data) => {
     try {
       await updateCareer(id, data);
-      toast.success("Lowongan berhasil diperbarui ✅");
+      toast.success("Lowongan berhasil diperbarui ✨");
       loadCareers();
     } catch (err) {
+      console.error(err.response?.data || err);
       toast.error("Gagal update lowongan ❌");
     }
   };
 
   // DELETE
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin ingin menghapus lowongan ini?")) return;
     try {
       await deleteCareer(id);
       toast.success("Lowongan berhasil dihapus 🗑️");
       setCareers(careers.filter((c) => c.id !== id));
     } catch (err) {
+      console.error(err.response?.data || err);
       toast.error("Gagal hapus lowongan ❌");
     }
   };
@@ -81,5 +102,6 @@ export const useCareers = () => {
     handleAdd,
     handleUpdate,
     handleDelete,
+    handleToggleStatus,
   };
 };

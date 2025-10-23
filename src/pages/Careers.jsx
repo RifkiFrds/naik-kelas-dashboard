@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCareers } from "../hooks/useCareers";
+import { Briefcase, Link2, Edit2, Trash2 } from "lucide-react";
+import Swal from "sweetalert2";
+import { Toast } from "../components/Toast"; 
 
 const Careers = () => {
   const {
@@ -8,52 +11,93 @@ const Careers = () => {
     newCareer,
     setNewCareer,
     handleAdd,
-    handleUpdate,
     handleDelete,
+    handleToggleStatus,
+    handleUpdate,
   } = useCareers();
+
+  const [editCareer, setEditCareer] = useState(null);
+  const [form, setForm] = useState({ posisi: "", deskripsi: "", url_cta: "", status: "dibuka" });
+
+  const openEditModal = (career) => {
+    setEditCareer(career);
+    setForm({
+      posisi: career.posisi,
+      deskripsi: career.deskripsi,
+      url_cta: career.url_cta,
+      status: career.status,
+    });
+    document.getElementById("edit_modal").showModal();
+  };
+
+  const submitUpdate = async () => {
+    await handleUpdate(editCareer.id, form);
+    document.getElementById("edit_modal").close();
+  };
+
+  // 🔹 konfirmasi hapus
+  const confirmDelete = (id, posisi) => {
+    Swal.fire({
+      title: `Hapus lowongan "${posisi}"?`,
+      text: "Aksi ini tidak bisa dibatalkan.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+      background: "#1f2937",
+      color: "#f9fafb",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await handleDelete(id);
+        Toast.success(`Lowongan "${posisi}" berhasil dihapus ✅`);
+      }
+    });
+  };
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold">Manajemen Lowongan Karir</h1>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+        <h1 className="text-3xl font-bold flex items-center gap-2">
+          <Briefcase className="w-8 h-8 text-primary" /> Manajemen Lowongan Karir
+        </h1>
+      </div>
 
-      {/* Form tambah */}
-      <div className="bg-white p-4 rounded-lg shadow space-y-3">
+      {/* Form Tambah Lowongan */}
+      <div className="bg-white p-6 rounded-lg shadow space-y-4">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Tambah Lowongan</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             className="input input-bordered w-full"
-            placeholder="Posisi"
+            placeholder="Posisi Jabatan"
             value={newCareer.posisi}
-            onChange={(e) =>
-              setNewCareer({ ...newCareer, posisi: e.target.value })
-            }
+            onChange={(e) => setNewCareer({ ...newCareer, posisi: e.target.value })}
           />
           <input
             className="input input-bordered w-full"
-            placeholder="URL CTA"
+            placeholder="Link Apply (URL CTA)"
             value={newCareer.url_cta}
-            onChange={(e) =>
-              setNewCareer({ ...newCareer, url_cta: e.target.value })
-            }
+            onChange={(e) => setNewCareer({ ...newCareer, url_cta: e.target.value })}
           />
           <textarea
-            className="textarea textarea-bordered col-span-full"
-            placeholder="Deskripsi"
+            className="textarea textarea-bordered md:col-span-2"
+            placeholder="Deskripsi Singkat"
+            rows={3}
             value={newCareer.deskripsi}
-            onChange={(e) =>
-              setNewCareer({ ...newCareer, deskripsi: e.target.value })
-            }
+            onChange={(e) => setNewCareer({ ...newCareer, deskripsi: e.target.value })}
           />
-          <button className="btn btn-primary col-span-full" onClick={handleAdd}>
+          <button className="btn btn-primary md:col-span-2" onClick={handleAdd}>
             + Tambah Lowongan
           </button>
         </div>
       </div>
 
-      {/* Tabel data */}
+      {/* Tabel Lowongan */}
       <div className="overflow-x-auto bg-base-100 rounded-lg shadow">
         {loading ? (
-          <div className="p-6 text-center">Memuat lowongan...</div>
+          <div className="p-6 text-center">Memuat data lowongan...</div>
         ) : (
           <table className="table table-zebra w-full">
             <thead>
@@ -61,51 +105,55 @@ const Careers = () => {
                 <th>Posisi</th>
                 <th>Deskripsi</th>
                 <th>Status</th>
-                <th>CTA</th>
-                <th>Aksi</th>
+                <th>Link</th>
+                <th className="text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {careers.length > 0 ? (
-                careers.map((job) => (
-                  <tr key={job.id}>
-                    <td className="font-bold">{job.posisi}</td>
-                    <td className="max-w-xs truncate">{job.deskripsi}</td>
+                careers.map((career) => (
+                  <tr key={career.id}>
+                    <td className="font-semibold">{career.posisi}</td>
+                    <td className="max-w-xs truncate">{career.deskripsi}</td>
                     <td>
-                      <span
-                        className={`badge ${
-                          job.status === 1
-                            ? "badge-success"
-                            : "badge-ghost"
-                        }`}
-                      >
-                        {job.status === 1 ? "Aktif" : "Nonaktif"}
-                      </span>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="toggle toggle-primary"
+                          checked={career.status === "dibuka"}
+                          onChange={() => handleToggleStatus(career)}
+                        />
+                        <span className="text-sm">
+                          {career.status === "dibuka" ? "Dibuka" : "Ditutup"}
+                        </span>
+                      </label>
                     </td>
                     <td>
-                      <a
-                        href={job.url_cta}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="link link-primary"
-                      >
-                        Apply
-                      </a>
+                      {career.url_cta ? (
+                        <a
+                          href={career.url_cta}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-primary flex items-center gap-1"
+                        >
+                          <Link2 size={16} /> Apply
+                        </a>
+                      ) : (
+                        "-"
+                      )}
                     </td>
-                    <td className="flex gap-2">
+                    <td className="flex justify-center gap-2">
                       <button
-                        className="btn btn-sm btn-warning"
-                        onClick={() =>
-                          handleUpdate(job.id, { ...job, status: job.status === 1 ? 0 : 1 })
-                        }
+                        className="btn btn-sm btn-warning flex items-center gap-1"
+                        onClick={() => openEditModal(career)}
                       >
-                        {job.status === 1 ? "Nonaktifkan" : "Aktifkan"}
+                        <Edit2 size={14} /> Edit
                       </button>
                       <button
-                        className="btn btn-sm btn-error"
-                        onClick={() => handleDelete(job.id)}
+                        className="btn btn-sm btn-error flex items-center gap-1"
+                        onClick={() => confirmDelete(career.id, career.posisi)}
                       >
-                        Hapus
+                        <Trash2 size={14} /> Hapus
                       </button>
                     </td>
                   </tr>
@@ -121,6 +169,47 @@ const Careers = () => {
           </table>
         )}
       </div>
+
+      {/* Modal Edit */}
+      <dialog id="edit_modal" className="modal">
+        <div className="modal-box space-y-4">
+          <h3 className="font-bold text-lg">Edit Lowongan</h3>
+          <input
+            className="input input-bordered w-full"
+            placeholder="Posisi"
+            value={form.posisi}
+            onChange={(e) => setForm({ ...form, posisi: e.target.value })}
+          />
+          <textarea
+            className="textarea textarea-bordered w-full"
+            placeholder="Deskripsi"
+            value={form.deskripsi}
+            onChange={(e) => setForm({ ...form, deskripsi: e.target.value })}
+          />
+          <input
+            className="input input-bordered w-full"
+            placeholder="Link Apply"
+            value={form.url_cta}
+            onChange={(e) => setForm({ ...form, url_cta: e.target.value })}
+          />
+          <select
+            className="select select-bordered w-full"
+            value={form.status}
+            onChange={(e) => setForm({ ...form, status: e.target.value })}
+          >
+            <option value="dibuka">Dibuka</option>
+            <option value="ditutup">Ditutup</option>
+          </select>
+          <div className="modal-action">
+            <button className="btn btn-primary" onClick={submitUpdate}>
+              Simpan
+            </button>
+            <form method="dialog">
+              <button className="btn">Batal</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
