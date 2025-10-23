@@ -1,0 +1,208 @@
+import React from "react";
+import { useLayananUmum } from "../hooks/useLayananUmum";
+import { Wrench, Link2, Edit2, Trash2 } from "lucide-react";
+import Swal from "sweetalert2";
+import { Toast } from "../components/Toast";
+
+const GeneralService = () => {
+  const {
+    layanan,
+    loading,
+    newLayanan,
+    setNewLayanan,
+    editing,
+    setEditing,
+    handleAdd,
+    handleUpdate,
+    handleDelete,
+  } = useLayananUmum();
+
+  // 🔹 Konfirmasi hapus pakai SweetAlert
+  const confirmDelete = (id, judul) => {
+    Swal.fire({
+      title: `Hapus layanan "${judul}"?`,
+      text: "Aksi ini tidak bisa dibatalkan.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+      background: "#1f2937",
+      color: "#f9fafb",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await handleDelete(id);
+        Toast.success(`Layanan "${judul}" berhasil dihapus ✅`);
+      }
+    });
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+        <h1 className="text-3xl font-bold flex items-center gap-2">
+          <Wrench className="w-8 h-8 text-primary" /> Manajemen Layanan Umum
+        </h1>
+      </div>
+
+      {/* Form Tambah Layanan */}
+      <div className="bg-white p-6 rounded-lg shadow space-y-4">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Tambah Layanan</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            className="input input-bordered w-full"
+            placeholder="Judul Layanan"
+            value={newLayanan.judul_layanan}
+            onChange={(e) =>
+              setNewLayanan({ ...newLayanan, judul_layanan: e.target.value })
+            }
+          />
+          <input
+            className="input input-bordered w-full"
+            placeholder="Highlight"
+            value={newLayanan.highlight}
+            onChange={(e) =>
+              setNewLayanan({ ...newLayanan, highlight: e.target.value })
+            }
+          />
+          <input
+            className="input input-bordered w-full md:col-span-2"
+            placeholder="Link CTA"
+            value={newLayanan.url_cta}
+            onChange={(e) =>
+              setNewLayanan({ ...newLayanan, url_cta: e.target.value })
+            }
+          />
+          <textarea
+            className="textarea textarea-bordered md:col-span-2"
+            placeholder="Deskripsi"
+            rows={3}
+            value={newLayanan.deskripsi}
+            onChange={(e) =>
+              setNewLayanan({ ...newLayanan, deskripsi: e.target.value })
+            }
+          />
+          <button className="btn btn-primary md:col-span-2" onClick={handleAdd}>
+            + Tambah Layanan
+          </button>
+        </div>
+      </div>
+
+      {/* Tabel Layanan */}
+      <div className="overflow-x-auto bg-base-100 rounded-lg shadow">
+        {loading ? (
+          <div className="p-6 text-center">Memuat data layanan...</div>
+        ) : (
+          <table className="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th>Judul</th>
+                <th>Deskripsi</th>
+                <th>Highlight</th>
+                <th>Link</th>
+                <th className="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {layanan.length > 0 ? (
+                layanan.map((item) => (
+                  <tr key={item.id}>
+                    <td className="font-semibold">{item.judul_layanan}</td>
+                    <td className="max-w-xs truncate">{item.deskripsi}</td>
+                    <td>{item.highlight || "-"}</td>
+                    <td>
+                      {item.url_cta ? (
+                        <a
+                          href={item.url_cta}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-primary flex items-center gap-1"
+                        >
+                          <Link2 size={16} /> Link
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                     <td className="flex justify-center gap-2">
+                      <button
+                        className="btn btn-sm btn-warning flex items-center gap-1"
+                        onClick={() => setEditing(item)}
+                      >
+                        <Edit2 size={14} /> Edit
+                      </button>
+                      <button
+                        className="btn btn-sm btn-error flex items-center gap-1"
+                        onClick={() => confirmDelete(item.id, item.judul_layanan)}
+                      >
+                        <Trash2 size={14} /> Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center p-6">
+                    Tidak ada layanan ditemukan.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Modal Edit */}
+      {editing && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg space-y-4">
+            <h2 className="text-xl font-semibold">Edit Layanan</h2>
+            <input
+              className="input input-bordered w-full"
+              value={editing.judul_layanan}
+              onChange={(e) =>
+                setEditing({ ...editing, judul_layanan: e.target.value })
+              }
+            />
+            <input
+              className="input input-bordered w-full"
+              value={editing.highlight}
+              onChange={(e) =>
+                setEditing({ ...editing, highlight: e.target.value })
+              }
+            />
+            <input
+              className="input input-bordered w-full"
+              value={editing.url_cta}
+              onChange={(e) =>
+                setEditing({ ...editing, url_cta: e.target.value })
+              }
+            />
+            <textarea
+              className="textarea textarea-bordered w-full"
+              value={editing.deskripsi}
+              onChange={(e) =>
+                setEditing({ ...editing, deskripsi: e.target.value })
+              }
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                className="btn btn-ghost"
+                onClick={() => setEditing(null)}
+              >
+                Batal
+              </button>
+              <button className="btn btn-primary" onClick={handleUpdate}>
+                Simpan Perubahan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GeneralService;
