@@ -61,17 +61,6 @@ const Navbar = ({ toggleDrawer }) => {
                 Profile & Settings
               </Link>
             </li>
-            <li>
-              <button
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  window.location.href = "/login";
-                }}
-                className="text-error"
-              >
-                Logout
-              </button>
-            </li>
           </ul>
         </div>
       </div>
