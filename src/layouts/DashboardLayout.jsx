@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function DashboardLayout() {
   const [isOpen, setIsOpen] = useState(true);
@@ -48,6 +49,7 @@ export default function DashboardLayout() {
         <main className="flex-1 p-6 lg:p-8 bg-base-100 rounded-tl-2xl shadow-inner">
           <Outlet />
         </main>
+        <Footer />
       </div>
 
       {/* Sidebar */}

@@ -5,26 +5,31 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardHome from "../pages/DashboardHome";
 import Careers from "../pages/Careers";
 import Login from "../pages/Login";
-import Users from "../pages/Users"; 
-// import Services from "../pages/Services";
-// import Partnerships from "../pages/Partnerships"; 
-import Settings from "../pages/Settings"; 
+import Users from "../pages/Users";
+import GeneralService from "../pages/GeneralService";
+// import Partnerships from "../pages/Partnerships";
+import Settings from "../pages/Settings";
+import NotFound from "../pages/NotFound";
 
-// Komponen untuk proteksi route
+// 🔹 Komponen untuk proteksi route
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
-  // return token ? children : <Navigate to="/login" />;
-  return children; // Bypass untuk development
+
+  // Jika token tidak ada, arahkan ke login
+  return token ? children : <Navigate to="/login" replace />;
 };
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        {/* Default redirect */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
+        {/* Login route */}
         <Route path="/login" element={<Login />} />
 
-        {/* Rute di dalam Dashboard yang diproteksi */}
+        {/* Dashboard - proteksi */}
         <Route
           path="/dashboard"
           element={
@@ -35,11 +40,14 @@ export default function AppRoutes() {
         >
           <Route index element={<DashboardHome />} />
           <Route path="careers" element={<Careers />} />
-          <Route path="users" element={<Users />} /> 
-          {/* <Route path="services" element={<Services />} />  */}
+          <Route path="users" element={<Users />} />
+          <Route path="general" element={<GeneralService />} />
           {/* <Route path="partnerships" element={<Partnerships />} /> */}
           <Route path="settings" element={<Settings />} />
         </Route>
+
+        {/* NotFound jika route tidak ada */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
