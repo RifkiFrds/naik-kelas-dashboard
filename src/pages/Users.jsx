@@ -1,7 +1,8 @@
 import React from "react";
 import { useUsers } from "../hooks/useUsers";
 import Swal from "sweetalert2";
-import toast from "react-hot-toast";
+import { Plus, UserCog } from "lucide-react";
+import { Toast } from "../components/Toast";
 
 const DEFAULT_AVATAR = "https://thumbs.dreamstime.com/b/print-302238697.jpg";
 
@@ -18,7 +19,6 @@ const Users = () => {
     handleUpdate,
   } = useUsers();
 
-  // konfirmasi hapus
   const confirmDelete = (id, nama) => {
     Swal.fire({
       title: `Hapus ${nama}?`,
@@ -29,17 +29,16 @@ const Users = () => {
       cancelButtonColor: "#6b7280",
       confirmButtonText: "Ya, hapus!",
       cancelButtonText: "Batal",
-      background: "#1f2937", // dark gray
-      color: "#f9fafb", // text-white
+      background: "#1f2937",
+      color: "#f9fafb",
     }).then(async (result) => {
       if (result.isConfirmed) {
         await handleDelete(id);
-        toast.success(`Pengguna ${nama} berhasil dihapus ✅`);
+        Toast.success(`Pengguna ${nama} berhasil dihapus ✅`);
       }
     });
   };
 
-  // konfirmasi jadikan admin
   const confirmMakeAdmin = (id, nama) => {
     Swal.fire({
       title: `Jadikan ${nama} sebagai Admin?`,
@@ -54,7 +53,7 @@ const Users = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await handleUpdate(id, "admin");
-        toast.success(`${nama} sekarang menjadi Admin 🎉`);
+        Toast.success(`${nama} sekarang menjadi Admin 🎉`);
       }
     });
   };
@@ -62,10 +61,11 @@ const Users = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* Header Halaman */}
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h1 className="text-3xl font-bold">
-          Manajemen Pengguna
-        </h1>
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <UserCog className="w-8 h-8 text-primary" />
+            Manajemen Pengguna
+          </h1>
         <div className="flex gap-2">
           {/* Search Input */}
           <label className="input input-bordered flex items-center gap-2">
@@ -119,7 +119,12 @@ const Users = () => {
               setNewUser({ ...newUser, password: e.target.value })
             }
           />
-          <button className="btn btn-primary w-full">+ Tambah Admin</button>
+          <button
+            className="btn btn-primary w-full flex items-center justify-center gap-2"
+            onClick={handleAddUser}
+          >
+            <Plus size={18} /> Tambah Admin
+          </button>
         </div>
       </div>
 
@@ -136,7 +141,6 @@ const Users = () => {
                 <th>Nama Pengguna</th>
                 <th>Email</th>
                 <th>Peran</th>
-                <th>Aksi</th>
               </tr>
             </thead>
             <tbody className="dark:text-gray-200">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getUsers, createUser, updateUser, deleteUser } from "../services/userService";
-import toast from "react-hot-toast";
+import { Toast } from "../components/Toast";
 
 const DEFAULT_AVATAR = "https://thumbs.dreamstime.com/b/print-302238697.jpg";
 
@@ -43,8 +43,7 @@ export const useUsers = () => {
       setUsers(data);
       setFilteredUsers(data);
     } catch (err) {
-      toast.error("Gagal memuat pengguna ❌");
-      console.error(err);
+      Toast.error("Gagal memuat pengguna ❌");
     } finally {
       setLoading(false);
     }
@@ -53,11 +52,11 @@ export const useUsers = () => {
   const handleAddUser = async () => {
     try {
       if (!newUser.nama || !newUser.email || !newUser.password) {
-        toast.error("Semua field wajib diisi!");
+        Toast.error("Semua field wajib diisi!");
         return;
       }
       await createUser(newUser);
-      toast.success("Admin berhasil ditambahkan 🎉");
+      Toast.success("Admin berhasil ditambahkan 🎉");
       setNewUser({
         nama: "",
         email: "",
@@ -67,29 +66,28 @@ export const useUsers = () => {
       });
       loadUsers();
     } catch (err) {
-      toast.error("Gagal menambahkan admin ❌");
+      Toast.error("Gagal menambahkan admin ❌");
       console.error(err.response?.data || err);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin hapus user ini?")) return;
     try {
       await deleteUser(id);
-      toast.success("Pengguna dihapus ✅");
+      Toast.success("Pengguna dihapus ✅");
       setUsers(users.filter((u) => u.id !== id));
     } catch (err) {
-      toast.error("Gagal hapus pengguna ❌");
+      Toast.error("Gagal hapus pengguna ❌");
     }
   };
 
   const handleUpdate = async (id, role) => {
     try {
       await updateUser(id, { role });
-      toast.success("Role berhasil diperbarui 🔧");
+      Toast.success("Role berhasil diperbarui 🔧");
       loadUsers();
     } catch (err) {
-      toast.error("Gagal update pengguna ❌");
+      Toast.error("Gagal update pengguna ❌");
     }
   };
 

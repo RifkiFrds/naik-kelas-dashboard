@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 
 // custom hook
 import { useAuth } from "../hooks/useAuth";
+import Footer from "../components/Footer";
 
 export default function Login() {
   const [email, setEmail] = useState("");    
@@ -20,6 +21,7 @@ export default function Login() {
   };
 
   return (
+    <>
     <div className="flex min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100">
       <Toaster position="top-right" reverseOrder={false} />
 
@@ -128,5 +130,7 @@ export default function Login() {
         </motion.div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
