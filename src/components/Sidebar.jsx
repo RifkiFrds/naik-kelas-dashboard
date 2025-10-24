@@ -46,7 +46,7 @@ const Sidebar = ({ closeDrawer }) => {
             { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
             { to: "/dashboard/users", label: "Users", icon: Users },
             { to: "/dashboard/general", label: "General Services", icon: Wrench },
-            { to: "/dashboard/services/business", label: "Business Services", icon: Layers },
+            { to: "/dashboard/business", label: "Business Services", icon: Layers },
             { to: "/dashboard/partnerships", label: "Partnerships", icon: Handshake },
             { to: "/dashboard/careers", label: "Careers", icon: Briefcase },
           ].map(({ to, label, icon: Icon }) => (

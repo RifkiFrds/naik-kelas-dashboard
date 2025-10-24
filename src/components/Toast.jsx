@@ -5,8 +5,8 @@ export const Toast = {
     toast.success(message, {
       style: {
         borderRadius: "10px",
-        background: "#1f2937", // gray-800
-        color: "#fff",
+        background: "#ffffffff", // white
+        color: "#000000ff",
         padding: "12px 16px",
         fontSize: "14px",
       },
