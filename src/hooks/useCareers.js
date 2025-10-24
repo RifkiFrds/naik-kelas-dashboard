@@ -21,6 +21,25 @@ export const useCareers = () => {
     loadCareers();
   }, []);
 
+  // seacrh carreers
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (!search.trim()) {
+      setCareers(careers);
+    } else {
+      const q = search.toLowerCase();
+      setCareers(
+        careers.filter(
+          (item) =>
+            item.posisi?.toLowerCase().includes(q) ||
+            item.deskripsi?.toLowerCase().includes(q) ||
+            item.status?.toLowerCase().includes(q)
+        )
+      );
+    };
+  }, [search, careers]);
+
   // GET
   const loadCareers = async () => {
     setLoading(true);
@@ -99,6 +118,8 @@ export const useCareers = () => {
     loading,
     newCareer,
     setNewCareer,
+    search,
+    setSearch,
     handleAdd,
     handleUpdate,
     handleDelete,

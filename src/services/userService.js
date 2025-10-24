@@ -23,6 +23,7 @@ export const updateUser = async (id, userData) => {
 
   if (userData.password && userData.password.length >= 6) {
     data.password = userData.password;
+    data.password_confirmation = userData.password; 
   }
 
   const res = await api.put(`/pengguna/${id}`, data);

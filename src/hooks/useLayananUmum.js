@@ -9,7 +9,10 @@ import { Toast } from "../components/Toast";
 
 export const useLayananUmum = () => {
   const [layanan, setLayanan] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // form tambah layanan
   const [newLayanan, setNewLayanan] = useState({
     judul_layanan: "",
     deskripsi: "",
@@ -17,12 +20,32 @@ export const useLayananUmum = () => {
     url_cta: "",
   });
 
-  // 🔹 modal edit
+  // modal edit
   const [editing, setEditing] = useState(null);
+
+  // search state
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     loadLayanan();
   }, []);
+
+  // 🔍 Filter layanan sesuai search
+  useEffect(() => {
+    if (!search.trim()) {
+      setFiltered(layanan);
+    } else {
+      const q = search.toLowerCase();
+      setFiltered(
+        layanan.filter(
+          (item) =>
+            item.judul_layanan?.toLowerCase().includes(q) ||
+            item.deskripsi?.toLowerCase().includes(q) ||
+            item.highlight?.toLowerCase().includes(q)
+        )
+      );
+    }
+  }, [search, layanan]);
 
   // GET
   const loadLayanan = async () => {
@@ -75,7 +98,6 @@ export const useLayananUmum = () => {
   const handleDelete = async (id) => {
     try {
       await deleteLayananUmum(id);
-      Toast.success("Layanan berhasil dihapus 🗑️");
       setLayanan(layanan.filter((l) => l.id !== id));
     } catch (err) {
       Toast.error("Gagal hapus layanan ❌");
@@ -83,12 +105,14 @@ export const useLayananUmum = () => {
   };
 
   return {
-    layanan,
+    layanan: filtered,   
     loading,
     newLayanan,
     setNewLayanan,
     editing,
     setEditing,
+    search,
+    setSearch,
     handleAdd,
     handleUpdate,
     handleDelete,

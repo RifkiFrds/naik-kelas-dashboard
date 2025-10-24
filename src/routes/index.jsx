@@ -7,9 +7,11 @@ import Careers from "../pages/Careers";
 import Login from "../pages/Login";
 import Users from "../pages/Users";
 import GeneralService from "../pages/GeneralService";
-// import Partnerships from "../pages/Partnerships";
+import BusinessService from "../pages/BusinessService";
+import Partnerships from "../pages/Partnerships";
 import Settings from "../pages/Settings";
 import NotFound from "../pages/NotFound";
+
 
 // 🔹 Komponen untuk proteksi route
 const PrivateRoute = ({ children }) => {
@@ -42,7 +44,8 @@ export default function AppRoutes() {
           <Route path="careers" element={<Careers />} />
           <Route path="users" element={<Users />} />
           <Route path="general" element={<GeneralService />} />
-          {/* <Route path="partnerships" element={<Partnerships />} /> */}
+          <Route path="business" element={<BusinessService />} />
+          <Route path="partnerships" element={<Partnerships />} />
           <Route path="settings" element={<Settings />} />
         </Route>
 

@@ -74,7 +74,6 @@ export const useUsers = () => {
   const handleDelete = async (id) => {
     try {
       await deleteUser(id);
-      Toast.success("Pengguna dihapus ✅");
       setUsers(users.filter((u) => u.id !== id));
     } catch (err) {
       Toast.error("Gagal hapus pengguna ❌");
