@@ -15,7 +15,10 @@ export const useAuth = () => {
       if (res.access_token) {
         localStorage.setItem("token", res.access_token);
         toast.success("Login berhasil 🎉");
-        setTimeout(() => navigate("/dashboard"), 1200);
+      setTimeout(() => {
+        toast.dismiss(); 
+        navigate("/dashboard");
+      }, 1200);
       } else {
         toast.error("Login berhasil, tapi token tidak diterima.");
       }
