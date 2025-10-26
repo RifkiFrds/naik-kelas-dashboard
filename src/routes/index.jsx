@@ -12,8 +12,7 @@ import Partnerships from "../pages/Partnerships";
 import Settings from "../pages/Settings";
 import NotFound from "../pages/NotFound";
 
-
-// 🔹 Komponen untuk proteksi route
+// Komponen untuk proteksi route
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
 
