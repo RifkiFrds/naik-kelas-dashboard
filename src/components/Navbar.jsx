@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Menu, Rocket } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { Link } from "react-router-dom";
-import api from "../app/api"; // buat fetch user login
+import api from "../app/api";
 import toast from "react-hot-toast";
 
 const Navbar = ({ toggleDrawer }) => {
