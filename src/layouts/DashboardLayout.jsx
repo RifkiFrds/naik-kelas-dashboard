@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Toaster } from "react-hot-toast";
 
 export default function DashboardLayout() {
   const [isOpen, setIsOpen] = useState(true);
@@ -44,6 +45,7 @@ export default function DashboardLayout() {
 
       {/* Main Content */}
       <div className="drawer-content flex flex-col">
+        <Toaster position="top-right" reverseOrder={false} />
         <Navbar toggleDrawer={toggleDrawer} />
 
         <main className="flex-1 p-6 lg:p-8 bg-base-100 rounded-tl-2xl shadow-inner">
