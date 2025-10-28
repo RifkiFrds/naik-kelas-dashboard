@@ -60,7 +60,7 @@ const Partnerships = () => {
 
       {/* Form Tambah Paket */}
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold">Tambah Paket Kemitraan</h2>
+        <h2 className="text-xl font-semibold text-gray-700">Tambah Paket Kemitraan</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             className="input input-bordered w-full"
