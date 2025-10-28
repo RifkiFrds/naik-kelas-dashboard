@@ -7,15 +7,17 @@ import {
 } from "../services/partnershipService";
 import { Toast } from "../components/Toast";
 
+// schema field wajib
+const SCHEMA_FIELDS = ["nama_paket", "gambar", "deskripsi", "fitur_unggulan", "harga", "url_cta"];
+
 export const usePartnership = () => {
   const [partnerships, setPartnerships] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtered, setFiltered] = useState([]);
 
-  // form tambah paket
   const [newPartnership, setNewPartnership] = useState({
     nama_paket: "",
-    gambar: "",
+    gambar: null,
     deskripsi: "",
     fitur_unggulan: "",
     harga: "",
@@ -45,12 +47,30 @@ export const usePartnership = () => {
     }
   }, [search, partnerships]);
 
+  // builder → selalu FormData
+  const buildPayload = (data) => {
+    const formData = new FormData();
+    SCHEMA_FIELDS.forEach((key) => {
+      if (data[key] !== undefined && data[key] !== null && data[key] !== "") {
+        if (key === "gambar") {
+          if (data[key] instanceof File) {
+            formData.append("gambar", data[key]);
+          }
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+    });
+    return formData;
+  };
+
   // GET
   const loadPartnerships = async () => {
     setLoading(true);
     try {
       const data = await getPartnerships();
       setPartnerships(data);
+      setFiltered(data);
     } catch (err) {
       Toast.error("Gagal memuat paket kemitraan ❌");
     } finally {
@@ -61,15 +81,20 @@ export const usePartnership = () => {
   // CREATE
   const handleAdd = async () => {
     try {
-      if (!newPartnership.nama_paket || !newPartnership.deskripsi) {
-        Toast.error("Nama Paket dan Deskripsi wajib diisi!");
-        return;
+      for (let key of SCHEMA_FIELDS) {
+        if (!newPartnership[key]) {
+          Toast.error(`Field ${key} wajib diisi!`);
+          return;
+        }
       }
-      await createPartnership(newPartnership);
+
+      const payload = buildPayload(newPartnership);
+      await createPartnership(payload);
+
       Toast.success("Paket berhasil ditambahkan 🎉");
       setNewPartnership({
         nama_paket: "",
-        gambar: "",
+        gambar: null,
         deskripsi: "",
         fitur_unggulan: "",
         harga: "",
@@ -77,6 +102,7 @@ export const usePartnership = () => {
       });
       loadPartnerships();
     } catch (err) {
+      console.error("Add error:", err.response?.data || err);
       Toast.error("Gagal menambah paket ❌");
     }
   };
@@ -85,11 +111,13 @@ export const usePartnership = () => {
   const handleUpdate = async () => {
     if (!editing) return;
     try {
-      await updatePartnership(editing.id, editing);
-      Toast.success("Paket berhasil diperbarui ");
+      const payload = buildPayload(editing);
+      await updatePartnership(editing.id, payload);
+      Toast.success("Paket berhasil diperbarui ✨");
       setEditing(null);
       loadPartnerships();
     } catch (err) {
+      console.error("Update error:", err.response?.data || err);
       Toast.error("Gagal update paket ❌");
     }
   };

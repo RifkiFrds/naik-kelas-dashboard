@@ -8,13 +8,13 @@ export const getPartnerships = async () => {
 
 // CREATE
 export const createPartnership = async (data) => {
-  const res = await api.post("/paket-kemitraan", data);
+  const res = await api.post("/paket-kemitraan", data); 
   return res.data;
 };
 
 // UPDATE
 export const updatePartnership = async (id, data) => {
-  const res = await api.put(`/paket-kemitraan/${id}`, data);
+  const res = await api.post(`/paket-kemitraan/${id}`, data); 
   return res.data;
 };
 
