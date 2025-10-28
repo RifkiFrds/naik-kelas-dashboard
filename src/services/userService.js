@@ -1,47 +1,73 @@
 import api from "../app/api";
 
-// GET semua pengguna
+// GET semua pengguna (Aman)
 export const getUsers = async () => {
   const res = await api.get("/pengguna");
-  return res.data.data;
+  // Pastikan data ada di res.data.data
+  return res.data?.data || []; // Tambahkan fallback array kosong
 };
 
-// CREATE user baru
+// CREATE user baru (Aman)
 export const createUser = async (userData) => {
-  const res = await api.post("/pengguna", userData);
+  const formData = new FormData();
+  formData.append("nama", userData.nama);
+  formData.append("email", userData.email);
+  formData.append("password", userData.password);
+  formData.append("role", userData.role);
+  
+  if (userData.foto_profil instanceof File) { // Pastikan hanya File yang di-append
+    formData.append("foto_profil", userData.foto_profil);
+  }
+
+  // Kirim ke endpoint /pengguna/admin
+  const res = await api.post("/pengguna/admin", formData, {
+    headers: { "Content-Type": null } 
+  });
   return res.data;
 };
 
 // UPDATE user
 export const updateUser = async (id, userData) => {
-  const data = {
-    role: userData.role || "admin",
-    nama: userData.nama,
-    email: userData.email,
-    foto_profil: userData.foto_profil || null,
-  };
+  const formData = new FormData();
 
-  if (userData.password && userData.password.length >= 6) {
-    data.password = userData.password;
-    data.password_confirmation = userData.password; 
-  }
+  Object.keys(userData).forEach((key) => {
+    const value = userData[key];
 
-  const res = await api.put(`/pengguna/${id}`, data);
+    if (value === null || value === undefined) return;
+
+    // Skip password kosong
+    if (key === "password" && value === "") return;
+    if (key === "password_confirmation" && userData["password"] === "") return;
+
+    // Foto profil hanya dikirim kalau File
+    if (key === "foto_profil") {
+      if (value instanceof File) {
+        formData.append("foto_profil", value);
+      }
+      return;
+    }
+
+    formData.append(key, value);
+  });
+
+  const res = await api.post(`/pengguna/${id}`, formData); 
   return res.data;
 };
 
-// DELETE user
+
+// DELETE user (Aman)
 export const deleteUser = async (id) => {
   const res = await api.delete(`/pengguna/${id}`);
   return res.data;
 };
 
-// Logout
+// Logout (Aman)
 export const logout = async () => {
   try {
     await api.post("/auth/logout"); 
   } catch (err) {
     console.error("Logout API error:", err);
   }
-  localStorage.removeItem("token"); // clear token di frontend
+  localStorage.removeItem("token");
 };
+

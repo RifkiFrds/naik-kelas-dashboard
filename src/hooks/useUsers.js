@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import api from "../app/api"; // Import api untuk fetch user login
 import { getUsers, createUser, updateUser, deleteUser } from "../services/userService";
-import { Toast } from "../components/Toast";
 
 const DEFAULT_AVATAR = "https://thumbs.dreamstime.com/b/print-302238697.jpg";
 
@@ -9,17 +9,18 @@ export const useUsers = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [currentUserRole, setCurrentUserRole] = useState(null); // State untuk role user login
 
   const [newUser, setNewUser] = useState({
     nama: "",
     email: "",
     password: "",
     role: "admin",
-    foto_profil: DEFAULT_AVATAR,
+    foto_profil: null,
   });
 
   useEffect(() => {
-    loadUsers();
+    loadUsersAndCurrentUser(); 
   }, []);
 
   useEffect(() => {
@@ -36,57 +37,63 @@ export const useUsers = () => {
     }
   }, [search, users]);
 
-  const loadUsers = async () => {
+  // Fungsi baru untuk load users dan role user login
+  const loadUsersAndCurrentUser = async () => {
     setLoading(true);
     try {
+      // Ambil data user login
+      const userRes = await api.get("/user"); 
+      setCurrentUserRole(userRes.data?.data?.role); // Simpan role user login
+
+      // Ambil list semua pengguna
       const data = await getUsers();
       setUsers(data);
       setFilteredUsers(data);
     } catch (err) {
-      Toast.error("Gagal memuat pengguna ❌");
+      console.error("Gagal memuat data:", err); 
     } finally {
       setLoading(false);
     }
   };
 
   const handleAddUser = async () => {
+    if (!newUser.nama || !newUser.email || !newUser.password) {
+       console.error("Semua field wajib diisi!");
+       return false; // Return false jika gagal
+    }
     try {
-      if (!newUser.nama || !newUser.email || !newUser.password) {
-        Toast.error("Semua field wajib diisi!");
-        return;
-      }
       await createUser(newUser);
-      Toast.success("Admin berhasil ditambahkan 🎉");
       setNewUser({
-        nama: "",
-        email: "",
-        password: "",
-        role: "admin",
-        foto_profil: DEFAULT_AVATAR,
+        nama: "", email: "", password: "", role: "admin", foto_profil: null,
       });
-      loadUsers();
+      loadUsersAndCurrentUser(); // Reload data
+      return true; // Return true jika sukses
     } catch (err) {
-      Toast.error("Gagal menambahkan admin ❌");
-      console.error(err.response?.data || err);
+      console.error("Gagal menambahkan admin:", err.response?.data || err);
+      return false; // Return false jika gagal
     }
   };
 
   const handleDelete = async (id) => {
     try {
       await deleteUser(id);
-      setUsers(users.filter((u) => u.id !== id));
+      loadUsersAndCurrentUser(); // Reload data
+      return true; // Return true jika sukses
     } catch (err) {
-      Toast.error("Gagal hapus pengguna ❌");
+      console.error("Gagal hapus pengguna:", err);
+      return false; // Return false jika gagal
     }
   };
 
-  const handleUpdate = async (id, role) => {
+  // Ganti nama fungsi agar lebih spesifik
+  const handleUpdateRole = async (id, role) => { 
     try {
-      await updateUser(id, { role });
-      Toast.success("Role berhasil diperbarui 🔧");
-      loadUsers();
+      await updateUser(id, { role }); // Hanya kirim role
+      loadUsersAndCurrentUser(); // Reload data
+      return true; // Return true jika sukses
     } catch (err) {
-      Toast.error("Gagal update pengguna ❌");
+      console.error("Gagal update role:", err);
+      return false; // Return false jika gagal
     }
   };
 
@@ -97,8 +104,9 @@ export const useUsers = () => {
     setNewUser,
     search,
     setSearch,
+    currentUserRole, // Kirim role user login ke komponen
     handleAddUser,
     handleDelete,
-    handleUpdate,
+    handleUpdateRole, // Kirim fungsi update role
   };
 };
