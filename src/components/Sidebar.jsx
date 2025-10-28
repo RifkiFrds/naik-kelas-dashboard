@@ -74,7 +74,7 @@ const Sidebar = ({ closeDrawer }) => {
           <button
             onClick={() => {
               localStorage.removeItem("token");
-              window.location.href = "/login";
+              window.location.href = "/";
             }}
             className="flex items-center gap-3 px-4 py-3 w-full rounded-xl hover:bg-white/10 text-white transition"
           >
