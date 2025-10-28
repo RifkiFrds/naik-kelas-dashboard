@@ -12,7 +12,7 @@ const Navbar = ({ toggleDrawer }) => {
     const fetchUser = async () => {
       try {
         const res = await api.get("/user"); // endpoint sanctum: api/user
-        setUser(res.data);
+        setUser(res.data?.data);
       } catch (err) {
         toast.error("Gagal memuat data user ❌");
       }
@@ -21,7 +21,7 @@ const Navbar = ({ toggleDrawer }) => {
   }, []);
 
   const avatarUrl =
-    user?.foto_profil ||
+    user?.foto_profil_url ||
     "https://thumbs.dreamstime.com/b/print-302238697.jpg"; // fallback default
 
   return (
