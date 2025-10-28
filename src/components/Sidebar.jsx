@@ -8,6 +8,7 @@ import {
   Briefcase,
   LogOut,
   Layers,
+  Mail
 } from "lucide-react";
 
 const Sidebar = ({ closeDrawer }) => {
@@ -39,7 +40,6 @@ const Sidebar = ({ closeDrawer }) => {
           </span>
         </div>
 
-
         {/* Menu Items */}
         <ul className="menu flex-1 space-y-2 text-sm">
           {[
@@ -49,6 +49,7 @@ const Sidebar = ({ closeDrawer }) => {
             { to: "/dashboard/business", label: "Business Services", icon: Layers },
             { to: "/dashboard/partnerships", label: "Partnerships", icon: Handshake },
             { to: "/dashboard/careers", label: "Careers", icon: Briefcase },
+            { to: "/dashboard/contact", label: "Contact Message", icon: Mail },
           ].map(({ to, label, icon: Icon }) => (
             <li key={to}>
               <NavLink
