@@ -81,7 +81,7 @@ export const useCareers = () => {
     try {
       const newStatus = career.status === "dibuka" ? "ditutup" : "dibuka";
       await updateCareer(career.id, { ...career, status: newStatus });
-      toast.success(`Status diubah menjadi ${newStatus.toUpperCase()} ✅`);
+      toast.success(`Status diubah menjadi ${newStatus.toUpperCase()} ✨`);
       loadCareers();
     } catch (err) {
       console.error(err.response?.data || err);

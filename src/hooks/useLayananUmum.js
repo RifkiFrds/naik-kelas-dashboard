@@ -86,7 +86,7 @@ export const useLayananUmum = () => {
     if (!editing) return;
     try {
       await updateLayananUmum(editing.id, editing);
-      Toast.success("Layanan berhasil diperbarui ✅");
+      Toast.success("Layanan berhasil diperbarui 🎉");
       setEditing(null);
       loadLayanan();
     } catch (err) {

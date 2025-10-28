@@ -86,7 +86,7 @@ export const usePartnership = () => {
     if (!editing) return;
     try {
       await updatePartnership(editing.id, editing);
-      Toast.success("Paket berhasil diperbarui ✅");
+      Toast.success("Paket berhasil diperbarui ");
       setEditing(null);
       loadPartnerships();
     } catch (err) {
