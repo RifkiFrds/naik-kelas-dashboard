@@ -39,7 +39,6 @@ export const useContact = () => {
     try {
       await deletePesanKontak(id);
       setPesan((prev) => prev.filter((p) => p.id !== id));
-      Toast.success("Pesan berhasil dihapus 🗑️");
     } catch (err) {
       Toast.error("Gagal hapus pesan ❌");
     }
