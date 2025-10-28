@@ -34,36 +34,22 @@ const BusinessService = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await handleDelete(id);
-        Toast.success(`Layanan "${judul}" berhasil dihapus ✅`);
+        Toast.success(`Layanan "${judul}" berhasil dihapus`);
       }
     });
   };
 
-  // render field dinamis berdasarkan type
+  // render field dinamis selain gambar
   const renderFields = (state, setState) => {
     switch (state.type) {
       case "trading":
         return (
-          <>
-            <input
-              className="input input-bordered w-full"
-              placeholder="Tipe Broker"
-              value={state.tipe_broker || ""}
-              onChange={(e) => setState({ ...state, tipe_broker: e.target.value })}
-            />
-          </>
-        );
-      case "reseller":
-      case "modal bisnis":
-        return (
-          <>
-            <input
-              className="input input-bordered w-full"
-              placeholder="Gambar (URL atau filename)"
-              value={state.gambar || ""}
-              onChange={(e) => setState({ ...state, gambar: e.target.value })}
-            />
-          </>
+          <input
+            className="input input-bordered w-full"
+            placeholder="Tipe Broker"
+            value={state.tipe_broker || ""}
+            onChange={(e) => setState({ ...state, tipe_broker: e.target.value })}
+          />
         );
       case "webinar":
         return (
@@ -80,7 +66,6 @@ const BusinessService = () => {
               value={state.waktu_mulai || ""}
               onChange={(e) => setState({ ...state, waktu_mulai: e.target.value })}
             />
-
             <input
               className="input input-bordered w-full"
               placeholder="Nama Mentor"
@@ -102,7 +87,6 @@ const BusinessService = () => {
           <Wrench className="w-8 h-8 text-primary" /> Manajemen Layanan Bisnis
         </h1>
          <div className="flex gap-2">
-          {/* Search Input */}
           <label className="input input-bordered flex items-center gap-2">
             <input
               type="text"
@@ -111,18 +95,6 @@ const BusinessService = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              className="w-4 h-4 opacity-70 dark:text-gray-400"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                clipRule="evenodd"
-              />
-            </svg>
           </label>
         </div>
       </div>
@@ -131,7 +103,6 @@ const BusinessService = () => {
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Tambah Layanan</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Select Type */}
           <select
             className="select select-bordered w-full"
             value={newLayanan.type}
@@ -144,7 +115,6 @@ const BusinessService = () => {
             <option value="webinar">Webinar</option>
           </select>
 
-          {/* Field dinamis */}
           {renderFields(newLayanan, setNewLayanan)}
 
           <input
@@ -153,6 +123,26 @@ const BusinessService = () => {
             value={newLayanan.judul_bisnis}
             onChange={(e) => setNewLayanan({ ...newLayanan, judul_bisnis: e.target.value })}
           />
+
+          {/* 🔹 Upload Gambar (universal) */}
+          <input 
+            type="file"
+            className="file-input file-input-bordered w-full"
+            onChange={(e) => setNewLayanan({ ...newLayanan, gambar: e.target.files[0] })}
+          />
+
+          {/* 🔹 Preview Gambar */}
+          {newLayanan.gambar && (
+            <div className="col-span-2 flex items-center gap-3">
+              <img
+                src={URL.createObjectURL(newLayanan.gambar)}
+                alt="Preview"
+                className="w-20 h-20 rounded object-cover border"
+              />
+              <span className="text-sm text-gray-500">Preview Gambar</span>
+            </div>
+          )}
+
           <input
             className="input input-bordered w-full"
             placeholder="Fitur Unggulan"
@@ -160,7 +150,7 @@ const BusinessService = () => {
             onChange={(e) => setNewLayanan({ ...newLayanan, fitur_unggulan: e.target.value })}
           />
           <input
-            className="input input-bordered w-full md:col-span-2"
+            className="input input-bordered w-full"
             placeholder="Link CTA"
             value={newLayanan.url_cta}
             onChange={(e) => setNewLayanan({ ...newLayanan, url_cta: e.target.value })}
@@ -185,46 +175,69 @@ const BusinessService = () => {
         ) : (
           <table className="table table-zebra w-full">
             <thead>
-              <tr>
-                <th>Type</th>
-                <th>Judul Bisnis</th>
-                <th>Deskripsi</th>
-                <th>Fitur</th>
-                <th>CTA</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {layanan.length > 0 ? (
-                layanan.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.type}</td>
-                    <td>{item.judul_bisnis}</td>
-                    <td className="truncate max-w-xs">{item.deskripsi}</td>
-                    <td className="truncate max-w-xs">{item.fitur_unggulan}</td>
-                    <td>
-                      <a href={item.url_cta} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-blue-600">
-                        <Link2 size={14} /> Link
-                      </a>
-                    </td>
-                    <td className="flex gap-2">
-                      <button className="btn btn-sm btn-warning flex items-center gap-1" onClick={() => setEditing(item)}>
-                        <Edit2 size={14} /> Edit
-                      </button>
-                      <button className="btn btn-sm btn-error flex items-center gap-1" onClick={() => confirmDelete(item.id, item.judul_bisnis)}>
-                        <Trash2 size={14} /> Hapus
-                      </button>
+                <tr>
+                  <th>Type</th>
+                  <th>Judul Bisnis</th>
+                  <th>Gambar</th>
+                  <th>Deskripsi</th>
+                  <th>Fitur</th>
+                  <th>CTA</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {layanan.length > 0 ? (
+                  layanan.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.type}</td>
+                      <td>{item.judul_bisnis}</td>
+                      <td>
+                        {item.gambar_url ? (
+                          <img
+                            src={item.gambar_url}
+                            alt={item.judul_bisnis}
+                            className="w-16 h-16 object-cover rounded"
+                          />
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td className="truncate max-w-xs">{item.deskripsi}</td>
+                      <td className="truncate max-w-xs">{item.fitur_unggulan}</td>
+                      <td>
+                        <a
+                          href={item.url_cta}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 text-blue-600"
+                        >
+                          <Link2 size={14} /> Link
+                        </a>
+                      </td>
+                      <td className="flex gap-2">
+                        <button
+                          className="btn btn-sm btn-warning flex items-center gap-1"
+                          onClick={() => setEditing(item)}
+                        >
+                          <Edit2 size={14} /> Edit
+                        </button>
+                        <button
+                          className="btn btn-sm btn-error flex items-center gap-1"
+                          onClick={() => confirmDelete(item.id, item.judul_bisnis)}
+                        >
+                          <Trash2 size={14} /> Hapus
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="text-center py-4">
+                      Tidak ada data layanan bisnis.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center py-4">
-                    Tidak ada data layanan bisnis.
-                  </td>
-                </tr>
-              )}
-            </tbody>
+                )}
+              </tbody>
           </table>
         )}
       </div>
@@ -254,6 +267,28 @@ const BusinessService = () => {
               value={editing.judul_bisnis}
               onChange={(e) => setEditing({ ...editing, judul_bisnis: e.target.value })}
             />
+
+            {/* 🔹 Upload Gambar Baru */}
+            <input
+              type="file"
+              className="file-input file-input-bordered w-full"
+              onChange={(e) => setEditing({ ...editing, gambar: e.target.files[0] })}
+            />
+
+            {/* 🔹 Preview Gambar */}
+            <div className="flex items-center gap-3">
+              <img
+                src={
+                  editing.gambar instanceof File
+                    ? URL.createObjectURL(editing.gambar)
+                    : editing.gambar || "/default.jpg"
+                }
+                alt="Preview"
+                className="w-20 h-20 rounded object-cover border"
+              />
+              <span className="text-sm text-gray-500">Preview Gambar</span>
+            </div>
+
             <input
               className="input input-bordered w-full"
               placeholder="Fitur Unggulan"

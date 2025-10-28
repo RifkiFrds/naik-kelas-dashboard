@@ -7,12 +7,44 @@ import {
 } from "../services/layananBisnisService";
 import { Toast } from "../components/Toast";
 
-// mapping field wajib per type
+// Semua type punya gambar
 const SCHEMA_FIELDS = {
-  trading: ["type", "tipe_broker", "judul_bisnis", "deskripsi", "fitur_unggulan", "url_cta"],
-  reseller: ["type", "judul_bisnis", "gambar", "deskripsi", "fitur_unggulan", "url_cta"],
-  "modal bisnis": ["type", "judul_bisnis", "gambar", "deskripsi", "fitur_unggulan", "url_cta"],
-  webinar: ["type", "judul_bisnis", "deskripsi", "tanggal_acara", "waktu_mulai", "nama_mentor", "fitur_unggulan", "url_cta"],
+  trading: [
+    "type",
+    "tipe_broker",
+    "judul_bisnis",
+    "gambar",
+    "deskripsi",
+    "fitur_unggulan",
+    "url_cta",
+  ],
+  reseller: [
+    "type",
+    "judul_bisnis",
+    "gambar",
+    "deskripsi",
+    "fitur_unggulan",
+    "url_cta",
+  ],
+  "modal bisnis": [
+    "type",
+    "judul_bisnis",
+    "gambar",
+    "deskripsi",
+    "fitur_unggulan",
+    "url_cta",
+  ],
+  webinar: [
+    "type",
+    "judul_bisnis",
+    "gambar",
+    "deskripsi",
+    "tanggal_acara",
+    "waktu_mulai",
+    "nama_mentor",
+    "fitur_unggulan",
+    "url_cta",
+  ],
 };
 
 export const useLayananBisnis = () => {
@@ -23,6 +55,7 @@ export const useLayananBisnis = () => {
   const [newLayanan, setNewLayanan] = useState({
     type: "",
     judul_bisnis: "",
+    gambar: null,
     deskripsi: "",
     fitur_unggulan: "",
     url_cta: "",
@@ -65,10 +98,25 @@ export const useLayananBisnis = () => {
     }
   };
 
-  const filterByType = (data) => {
+  // utility builder: selalu FormData
+  const buildPayload = (data) => {
     const fields = SCHEMA_FIELDS[data.type];
     if (!fields) return data;
-    return Object.fromEntries(Object.entries(data).filter(([key]) => fields.includes(key)));
+
+    const formData = new FormData();
+    fields.forEach((key) => {
+      if (data[key] !== undefined && data[key] !== null && data[key] !== "") {
+        if (key === "gambar") {
+          if (data[key] instanceof File) {
+            formData.append("gambar", data[key]);
+          }
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+    });
+
+    return formData;
   };
 
   // CREATE
@@ -78,18 +126,26 @@ export const useLayananBisnis = () => {
         Toast.error("Pilih Type layanan terlebih dahulu!");
         return;
       }
-      const payload = filterByType(newLayanan);
 
       for (let key of SCHEMA_FIELDS[newLayanan.type]) {
-        if (!payload[key]) {
+        if (!newLayanan[key]) {
           Toast.error(`Field ${key} wajib diisi!`);
           return;
         }
       }
 
+      const payload = buildPayload(newLayanan);
       await createLayananBisnis(payload);
+
       Toast.success("Layanan bisnis berhasil ditambahkan 🎉");
-      setNewLayanan({ type: "", judul_bisnis: "", deskripsi: "", fitur_unggulan: "", url_cta: "" });
+      setNewLayanan({
+        type: "",
+        judul_bisnis: "",
+        gambar: null,
+        deskripsi: "",
+        fitur_unggulan: "",
+        url_cta: "",
+      });
       loadLayanan();
     } catch (err) {
       Toast.error("Gagal menambah layanan bisnis ❌");
@@ -100,9 +156,9 @@ export const useLayananBisnis = () => {
   const handleUpdate = async () => {
     if (!editing) return;
     try {
-      const payload = filterByType(editing);
+      const payload = buildPayload(editing);
       await updateLayananBisnis(editing.id, payload);
-      Toast.success("Layanan bisnis berhasil diperbarui ✅");
+      Toast.success("Layanan bisnis berhasil diperbarui ✨");
       setEditing(null);
       loadLayanan();
     } catch (err) {

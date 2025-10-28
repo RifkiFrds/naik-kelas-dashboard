@@ -35,7 +35,7 @@ const GeneralService = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await handleDelete(id);
-        Toast.success(`Layanan "${judul}" berhasil dihapus ✅`);
+        Toast.success(`Layanan "${judul}" berhasil dihapus`);
       }
     });
   };
@@ -80,7 +80,7 @@ const GeneralService = () => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
-            className="input input-bordered w-full md:col-span-2"
+            className="input input-bordered w-full"
             placeholder="Judul Layanan"
             value={newLayanan.judul_layanan}
             onChange={(e) =>
