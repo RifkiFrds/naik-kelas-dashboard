@@ -45,7 +45,7 @@ const GeneralService = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Wrench className="w-8 h-8 text-primary" /> Manajemen Layanan Umum
+          <Wrench className="w-8 h-8 text-[#FFBC41]" /> Manajemen Layanan Umum
         </h1>
         <div className="flex gap-2">
           {/* Search Input */}
@@ -112,7 +112,7 @@ const GeneralService = () => {
               setNewLayanan({ ...newLayanan, deskripsi: e.target.value })
             }
           />
-          <button className="btn btn-primary md:col-span-2" onClick={handleAdd}>
+          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2" onClick={handleAdd}>
             + Tambah Layanan
           </button>
         </div>

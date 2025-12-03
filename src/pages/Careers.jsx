@@ -62,7 +62,7 @@ const Careers = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Briefcase className="w-8 h-8 text-primary" /> Manajemen Lowongan Karir
+          <Briefcase className="w-8 h-8 text-[#FFBC41]" /> Manajemen Lowongan Karir
         </h1>
         <div className="flex gap-2">
           {/* Search Input */}
@@ -113,7 +113,7 @@ const Careers = () => {
             value={newCareer.deskripsi}
             onChange={(e) => setNewCareer({ ...newCareer, deskripsi: e.target.value })}
           />
-          <button className="btn btn-primary md:col-span-2" onClick={handleAdd}>
+          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2" onClick={handleAdd}>
             + Tambah Lowongan
           </button>
         </div>

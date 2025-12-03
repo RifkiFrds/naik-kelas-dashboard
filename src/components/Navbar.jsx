@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Menu, Rocket } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { Link } from "react-router-dom";
-import api from "../app/api";
+import api from "../api/api";
 import toast from "react-hot-toast";
 
 const Navbar = ({ toggleDrawer }) => {
@@ -33,8 +33,8 @@ const Navbar = ({ toggleDrawer }) => {
         </button>
 
         {/* Branding */}
-        <span className="flex items-center gap-2 text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          <Rocket className="w-7 h-7 text-primary" />
+        <span className="flex items-center gap-2 text-2xl font-bold text-[#FFBC41]">
+          <Rocket className="w-7 h-7 text-[#FFBC41]" />
           Naik Kelas
         </span>
       </div>

@@ -102,7 +102,7 @@ const Users = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-3xl font-bold flex items-center gap-2">
-          <UserCog className="w-8 h-8 text-primary" />
+          <UserCog className="w-8 h-8 text-[#FFBC41]" />
           Manajemen Pengguna
         </h1>
         <div className="flex gap-2">
@@ -161,7 +161,7 @@ const Users = () => {
             </div>
           )}
           <button
-            className="btn btn-primary w-full flex items-center justify-center gap-2 md:col-span-2"
+            className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] w-full flex items-center justify-center gap-2 md:col-span-2"
             onClick={submitAddUser}
           >
             <Plus size={18} /> Tambah Admin

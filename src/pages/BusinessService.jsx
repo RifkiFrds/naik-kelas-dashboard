@@ -84,7 +84,7 @@ const BusinessService = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Wrench className="w-8 h-8 text-primary" /> Manajemen Layanan Bisnis
+          <Wrench className="w-8 h-8 text-[#FFBC41]" /> Manajemen Layanan Bisnis
         </h1>
          <div className="flex gap-2">
           <label className="input input-bordered flex items-center gap-2">
@@ -162,7 +162,7 @@ const BusinessService = () => {
             value={newLayanan.deskripsi}
             onChange={(e) => setNewLayanan({ ...newLayanan, deskripsi: e.target.value })}
           />
-          <button className="btn btn-primary md:col-span-2" onClick={handleAdd}>
+          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2" onClick={handleAdd}>
             + Tambah Layanan
           </button>
         </div>

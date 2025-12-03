@@ -1,18 +1,24 @@
 import toast from "react-hot-toast";
 
+const COLOR = {
+  primary: "#FFBC41",
+  secondary: "#000B2C",
+};
+
 export const Toast = {
   success: (message) =>
     toast.success(message, {
       style: {
         borderRadius: "10px",
-        background: "#ffffffff", // white
-        color: "#000000ff",
+        background: COLOR.primary,     // gold
+        color: COLOR.secondary,        // navy text
         padding: "12px 16px",
         fontSize: "14px",
+        fontWeight: "600",
       },
       iconTheme: {
-        primary: "#4ade80", // green-400
-        secondary: "#1f2937",
+        primary: COLOR.secondary,      // navy icon bg
+        secondary: COLOR.primary,      // gold icon symbol
       },
     }),
 
@@ -20,14 +26,15 @@ export const Toast = {
     toast.error(message, {
       style: {
         borderRadius: "10px",
-        background: "#1f2937",
-        color: "#fff",
+        background: COLOR.secondary,    // navy background
+        color: "#fff",                  // bright white text
         padding: "12px 16px",
         fontSize: "14px",
+        fontWeight: "600",
       },
       iconTheme: {
-        primary: "#f87171", // red-400
-        secondary: "#1f2937",
+        primary: "#ff4d4d",             // red semi-gold blend
+        secondary: COLOR.secondary,     // navy circle
       },
     }),
 
@@ -35,10 +42,16 @@ export const Toast = {
     toast(message, {
       style: {
         borderRadius: "10px",
-        background: "#2563eb", // blue-600
-        color: "#fff",
+        background: "#0A123D",          // darker version of secondary
+        color: COLOR.primary,           // gold text
         padding: "12px 16px",
         fontSize: "14px",
+        fontWeight: "600",
+        borderLeft: `4px solid ${COLOR.primary}`, // gold marker accent
+      },
+      iconTheme: {
+        primary: COLOR.primary,
+        secondary: "#0A123D",
       },
     }),
 };

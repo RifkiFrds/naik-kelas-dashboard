@@ -44,7 +44,7 @@ const Partnerships = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Handshake className="w-8 h-8 text-primary" /> Manajemen Kemitraan
+          <Handshake className="w-8 h-8 text-[#FFBC41]" /> Manajemen Kemitraan
         </h1>
         {/* Search */}
         <label className="input input-bordered flex items-center gap-2">
@@ -129,7 +129,7 @@ const Partnerships = () => {
               setNewPartnership({ ...newPartnership, deskripsi: e.target.value })
             }
           />
-          <button className="btn btn-primary md:col-span-2" onClick={handleAdd}>
+          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2" onClick={handleAdd}>
             + Tambah Paket
           </button>
         </div>
