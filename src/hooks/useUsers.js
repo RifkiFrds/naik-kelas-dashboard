@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../app/api"; // Import api untuk fetch user login
+import api from "../api/api"; 
 import { getUsers, createUser, updateUser, deleteUser } from "../services/userService";
 
 const DEFAULT_AVATAR = "https://thumbs.dreamstime.com/b/print-302238697.jpg";

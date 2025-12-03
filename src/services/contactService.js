@@ -1,4 +1,4 @@
-import api from "../app/api";
+import api from "../api/api";
 
 // GET semua pesan
 export const getPesanKontak = async () => {

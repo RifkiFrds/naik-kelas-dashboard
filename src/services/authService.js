@@ -1,4 +1,4 @@
-import api from "../app/api";
+import api from "../api/api";
 
 // request login ke backend
 export const login = async (email, password) => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../app/api";
+import api from "../api/api";
 import { updateUser } from "../services/userService";
 import toast from "react-hot-toast";
 
