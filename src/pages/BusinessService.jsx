@@ -66,12 +66,6 @@ const BusinessService = () => {
               value={state.waktu_mulai || ""}
               onChange={(e) => setState({ ...state, waktu_mulai: e.target.value })}
             />
-            <input
-              className="input input-bordered w-full"
-              placeholder="Nama Mentor"
-              value={state.nama_mentor || ""}
-              onChange={(e) => setState({ ...state, nama_mentor: e.target.value })}
-            />
           </>
         );
       default:
@@ -110,7 +104,7 @@ const BusinessService = () => {
           >
             <option value="">-- Pilih Type --</option>
             <option value="trading">Trading</option>
-            <option value="reseller">Reseller</option>
+            <option value="jasa_recruitment">Jasa Recruitment</option>
             <option value="modal bisnis">Modal Bisnis</option>
             <option value="webinar">Webinar</option>
           </select>
@@ -123,8 +117,6 @@ const BusinessService = () => {
             value={newLayanan.judul_bisnis}
             onChange={(e) => setNewLayanan({ ...newLayanan, judul_bisnis: e.target.value })}
           />
-
-          {/* 🔹 Upload Gambar (universal) */}
           <input 
             type="file"
             className="file-input file-input-bordered w-full"

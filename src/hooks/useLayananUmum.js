@@ -12,25 +12,21 @@ export const useLayananUmum = () => {
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // form tambah layanan
   const [newLayanan, setNewLayanan] = useState({
     judul_layanan: "",
     deskripsi: "",
+    gambar: null,
     highlight: "",
     url_cta: "",
   });
 
-  // modal edit
   const [editing, setEditing] = useState(null);
-
-  // search state
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     loadLayanan();
   }, []);
 
-  // 🔍 Filter layanan sesuai search
   useEffect(() => {
     if (!search.trim()) {
       setFiltered(layanan);
@@ -47,7 +43,6 @@ export const useLayananUmum = () => {
     }
   }, [search, layanan]);
 
-  // GET
   const loadLayanan = async () => {
     setLoading(true);
     try {
@@ -60,7 +55,6 @@ export const useLayananUmum = () => {
     }
   };
 
-  // CREATE
   const handleAdd = async () => {
     try {
       if (!newLayanan.judul_layanan || !newLayanan.deskripsi) {
@@ -72,16 +66,16 @@ export const useLayananUmum = () => {
       setNewLayanan({
         judul_layanan: "",
         deskripsi: "",
+        gambar: null,
         highlight: "",
         url_cta: "",
       });
       loadLayanan();
-    } catch (err) {
+    } catch {
       Toast.error("Gagal menambah layanan ❌");
     }
   };
 
-  // UPDATE
   const handleUpdate = async () => {
     if (!editing) return;
     try {
@@ -89,23 +83,22 @@ export const useLayananUmum = () => {
       Toast.success("Layanan berhasil diperbarui 🎉");
       setEditing(null);
       loadLayanan();
-    } catch (err) {
+    } catch {
       Toast.error("Gagal update layanan ❌");
     }
   };
 
-  // DELETE
   const handleDelete = async (id) => {
     try {
       await deleteLayananUmum(id);
-      setLayanan(layanan.filter((l) => l.id !== id));
-    } catch (err) {
+      setLayanan(layanan.filter((x) => x.id !== id));
+    } catch {
       Toast.error("Gagal hapus layanan ❌");
     }
   };
 
   return {
-    layanan: filtered,   
+    layanan: filtered,
     loading,
     newLayanan,
     setNewLayanan,
