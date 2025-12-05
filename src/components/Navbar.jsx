@@ -31,12 +31,6 @@ const Navbar = ({ toggleDrawer }) => {
         <button onClick={toggleDrawer} className="btn btn-ghost btn-square">
           <Menu className="w-6 h-6" />
         </button>
-
-        {/* Branding */}
-        <span className="flex items-center gap-2 text-2xl font-bold text-[#FFBC41]">
-          <Rocket className="w-7 h-7 text-[#FFBC41]" />
-          Naik Kelas
-        </span>
       </div>
 
       {/* Right Section */}
