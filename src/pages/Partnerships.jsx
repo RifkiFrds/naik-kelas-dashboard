@@ -34,7 +34,7 @@ const Partnerships = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await handleDelete(id);
-        Toast.success(`Paket "${nama}" berhasil dihapus ✅`);
+        Toast.success(`Paket "${nama}" berhasil dihapus`);
       }
     });
   };
@@ -43,14 +43,14 @@ const Partnerships = () => {
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
           <Handshake className="w-8 h-8 text-[#FFBC41]" /> Manajemen Kemitraan
         </h1>
-        {/* Search */}
+
         <label className="input input-bordered flex items-center gap-2">
           <input
             type="text"
-            className="grow bg-transparent focus:outline-none dark:text-gray-200"
+            className="grow bg-transparent"
             placeholder="Cari paket..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -60,10 +60,12 @@ const Partnerships = () => {
 
       {/* Form Tambah Paket */}
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold text-gray-700">Tambah Paket Kemitraan</h2>
+        <h2 className="text-lg font-semibold text-gray-700">Tambah Paket Kemitraan</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          {/* Nama Paket */}
           <input
-            className="input input-bordered w-full"
+            className="input input-bordered w-full col-span-2"
             placeholder="Nama Paket"
             value={newPartnership.nama_paket}
             onChange={(e) =>
@@ -71,16 +73,62 @@ const Partnerships = () => {
             }
           />
 
-          {/* 🔹 Upload Gambar */}
+          {/* Deskripsi */}
+          <textarea
+            className="textarea textarea-bordered w-full col-span-2"
+            placeholder="Deskripsi paket"
+            rows={3}
+            value={newPartnership.deskripsi}
+            onChange={(e) =>
+              setNewPartnership({ ...newPartnership, deskripsi: e.target.value })
+            }
+          />
+
+          {/* Fitur Unggulan */}
+          <textarea
+            className="textarea textarea-bordered w-full col-span-2"
+            placeholder="Fitur Unggulan (pisahkan dengan enter)"
+            rows={3}
+            value={newPartnership.fitur_unggulan}
+            onChange={(e) =>
+              setNewPartnership({
+                ...newPartnership,
+                fitur_unggulan: e.target.value,
+              })
+            }
+          />
+
+          {/* Harga */}
+          <input
+            type="number"
+            className="input input-bordered w-full col-span-2"
+            placeholder="Harga"
+            value={newPartnership.harga}
+            onChange={(e) =>
+              setNewPartnership({ ...newPartnership, harga: e.target.value })
+            }
+          />
+
+          {/* CTA Link */}
+          <input
+            className="input input-bordered w-full col-span-2"
+            placeholder="Link CTA"
+            value={newPartnership.url_cta}
+            onChange={(e) =>
+              setNewPartnership({ ...newPartnership, url_cta: e.target.value })
+            }
+          />
+
+          {/* Upload Gambar */}
           <input
             type="file"
-            className="file-input file-input-bordered w-full"
+            className="file-input file-input-bordered w-full col-span-2"
             onChange={(e) =>
               setNewPartnership({ ...newPartnership, gambar: e.target.files[0] })
             }
           />
 
-          {/* 🔹 Preview Gambar */}
+          {/* Preview Image */}
           {newPartnership.gambar && newPartnership.gambar instanceof File && (
             <div className="col-span-2 flex items-center gap-3">
               <img
@@ -92,44 +140,8 @@ const Partnerships = () => {
             </div>
           )}
 
-          <input
-            className="input input-bordered w-full"
-            placeholder="Fitur Unggulan"
-            value={newPartnership.fitur_unggulan}
-            onChange={(e) =>
-              setNewPartnership({
-                ...newPartnership,
-                fitur_unggulan: e.target.value,
-              })
-            }
-          />
-          <input
-            type="number"
-            className="input input-bordered w-full"
-            placeholder="Harga"
-            value={newPartnership.harga}
-            onChange={(e) =>
-              setNewPartnership({ ...newPartnership, harga: e.target.value })
-            }
-          />
-          <input
-            className="input input-bordered w-full md:col-span-2"
-            placeholder="Link CTA"
-            value={newPartnership.url_cta}
-            onChange={(e) =>
-              setNewPartnership({ ...newPartnership, url_cta: e.target.value })
-            }
-          />
-          <textarea
-            className="textarea textarea-bordered md:col-span-2"
-            placeholder="Deskripsi"
-            rows={3}
-            value={newPartnership.deskripsi}
-            onChange={(e) =>
-              setNewPartnership({ ...newPartnership, deskripsi: e.target.value })
-            }
-          />
-          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2" onClick={handleAdd}>
+          {/* Submit */}
+          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] col-span-2" onClick={handleAdd}>
             + Tambah Paket
           </button>
         </div>
@@ -157,6 +169,7 @@ const Partnerships = () => {
                 partnerships.map((item) => (
                   <tr key={item.id}>
                     <td>{item.nama_paket}</td>
+
                     <td>
                       {item.gambar_url ? (
                         <img
@@ -169,9 +182,12 @@ const Partnerships = () => {
                         "-"
                       )}
                     </td>
+
                     <td className="max-w-xs truncate">{item.deskripsi}</td>
                     <td className="max-w-xs truncate">{item.fitur_unggulan}</td>
+
                     <td>Rp {Number(item.harga).toLocaleString()}</td>
+
                     <td>
                       <a
                         href={item.url_cta}
@@ -182,6 +198,7 @@ const Partnerships = () => {
                         <Link2 size={14} /> Link
                       </a>
                     </td>
+
                     <td className="flex gap-2">
                       <button
                         className="btn btn-sm btn-warning flex items-center gap-1"
@@ -215,16 +232,51 @@ const Partnerships = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-2xl space-y-4">
             <h2 className="text-xl font-semibold">Edit Paket</h2>
+
+            {/* Nama Paket */}
             <input
               className="input input-bordered w-full"
               placeholder="Nama Paket"
               value={editing.nama_paket}
-              onChange={(e) =>
-                setEditing({ ...editing, nama_paket: e.target.value })
-              }
+              onChange={(e) => setEditing({ ...editing, nama_paket: e.target.value })}
             />
 
-            {/* 🔹 Preview Gambar Lama / Baru */}
+            {/* Deskripsi */}
+            <textarea
+              className="textarea textarea-bordered w-full"
+              placeholder="Deskripsi"
+              rows={3}
+              value={editing.deskripsi}
+              onChange={(e) => setEditing({ ...editing, deskripsi: e.target.value })}
+            />
+
+            {/* Fitur Unggulan */}
+            <textarea
+              className="textarea textarea-bordered w-full"
+              placeholder="Fitur Unggulan"
+              rows={3}
+              value={editing.fitur_unggulan}
+              onChange={(e) => setEditing({ ...editing, fitur_unggulan: e.target.value })}
+            />
+
+            {/* Harga */}
+            <input
+              type="number"
+              className="input input-bordered w-full"
+              placeholder="Harga"
+              value={editing.harga}
+              onChange={(e) => setEditing({ ...editing, harga: e.target.value })}
+            />
+
+            {/* CTA Link */}
+            <input
+              className="input input-bordered w-full"
+              placeholder="Link CTA"
+              value={editing.url_cta}
+              onChange={(e) => setEditing({ ...editing, url_cta: e.target.value })}
+            />
+
+            {/* Preview Gambar */}
             <div className="flex items-center gap-3">
               <img
                 src={
@@ -237,44 +289,14 @@ const Partnerships = () => {
               />
             </div>
 
-            {/* 🔹 Upload Gambar Baru */}
+            {/* Upload Gambar Baru */}
             <input
               type="file"
               className="file-input file-input-bordered w-full"
-              onChange={(e) =>
-                setEditing({ ...editing, gambar: e.target.files[0] })
-              }
+              onChange={(e) => setEditing({ ...editing, gambar: e.target.files[0] })}
             />
 
-            <input
-              className="input input-bordered w-full"
-              placeholder="Fitur Unggulan"
-              value={editing.fitur_unggulan}
-              onChange={(e) =>
-                setEditing({ ...editing, fitur_unggulan: e.target.value })
-              }
-            />
-            <input
-              type="number"
-              className="input input-bordered w-full"
-              placeholder="Harga"
-              value={editing.harga}
-              onChange={(e) => setEditing({ ...editing, harga: e.target.value })}
-            />
-            <input
-              className="input input-bordered w-full"
-              placeholder="Link CTA"
-              value={editing.url_cta}
-              onChange={(e) => setEditing({ ...editing, url_cta: e.target.value })}
-            />
-            <textarea
-              className="textarea textarea-bordered w-full"
-              placeholder="Deskripsi"
-              value={editing.deskripsi}
-              onChange={(e) =>
-                setEditing({ ...editing, deskripsi: e.target.value })
-              }
-            />
+            {/* Tombol */}
             <div className="flex justify-end gap-2">
               <button className="btn" onClick={() => setEditing(null)}>
                 Batal
@@ -286,6 +308,7 @@ const Partnerships = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

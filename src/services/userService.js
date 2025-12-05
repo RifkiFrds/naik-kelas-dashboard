@@ -1,6 +1,5 @@
 import api from "../api/api";
 
-// GET semua pengguna (Aman)
 export const getUsers = async () => {
   const res = await api.get("/pengguna");
   // Pastikan data ada di res.data.data

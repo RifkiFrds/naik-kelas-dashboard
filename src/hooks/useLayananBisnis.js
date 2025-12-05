@@ -26,7 +26,7 @@ const SCHEMA_FIELDS = {
     "fitur_unggulan",
     "url_cta",
   ],
-  "modal bisnis": [
+  "modal_bisnis": [
     "type",
     "judul_bisnis",
     "gambar",

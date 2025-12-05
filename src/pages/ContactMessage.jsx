@@ -37,7 +37,7 @@ const ContactMessage = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <h1 className="text-3xl font-bold flex items-center gap-2">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
         <Mail className="w-8 h-8 text-[#FFBC41] inline-block mr-2" /> Manajemen Pesan Kontak
       </h1>
 

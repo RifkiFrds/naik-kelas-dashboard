@@ -41,9 +41,10 @@ const GeneralService = () => {
 
   return (
     <div className="flex flex-col gap-6">
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
           <Wrench className="w-8 h-8 text-[#FFBC41]" /> Manajemen Layanan Umum
         </h1>
 
@@ -62,54 +63,76 @@ const GeneralService = () => {
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
         <h2 className="text-xl font-semibold text-gray-900">Tambah Layanan</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            className="input input-bordered w-full"
-            placeholder="Judul Layanan"
-            value={newLayanan.judul_layanan}
-            onChange={(e) =>
-              setNewLayanan({ ...newLayanan, judul_layanan: e.target.value })
-            }
-          />
+        <div className="space-y-4">
 
-          <input
-            className="input input-bordered w-full"
-            placeholder="Highlight"
-            value={newLayanan.highlight}
-            onChange={(e) =>
-              setNewLayanan({ ...newLayanan, highlight: e.target.value })
-            }
-          />
+          {/* Judul */}
+          <div>
+            <label className="font-medium text-sm">Judul Layanan</label>
+            <input
+              className="input input-bordered w-full mt-1"
+              placeholder="Judul Layanan"
+              value={newLayanan.judul_layanan}
+              onChange={(e) =>
+                setNewLayanan({ ...newLayanan, judul_layanan: e.target.value })
+              }
+            />
+          </div>
 
-          <input
-            className="input input-bordered w-full md:col-span-2"
-            placeholder="Link CTA"
-            value={newLayanan.url_cta}
-            onChange={(e) =>
-              setNewLayanan({ ...newLayanan, url_cta: e.target.value })
-            }
-          />
+          {/* Deskripsi */}
+          <div>
+            <label className="font-medium text-sm">Deskripsi</label>
+            <textarea
+              className="textarea textarea-bordered w-full mt-1"
+              placeholder="Deskripsi"
+              rows={3}
+              value={newLayanan.deskripsi}
+              onChange={(e) =>
+                setNewLayanan({ ...newLayanan, deskripsi: e.target.value })
+              }
+            />
+          </div>
 
-          <input
-            type="file"
-            className="file-input file-input-bordered w-full md:col-span-2"
-            onChange={(e) =>
-              setNewLayanan({ ...newLayanan, gambar: e.target.files[0] })
-            }
-          />
+          {/* Highlight */}
+          <div>
+            <label className="font-medium text-sm">Highlight</label>
+            <textarea
+              className="textarea textarea-bordered w-full mt-1"
+              placeholder="Highlight"
+              rows={2}
+              value={newLayanan.highlight}
+              onChange={(e) =>
+                setNewLayanan({ ...newLayanan, highlight: e.target.value })
+              }
+            />
+          </div>
 
-          <textarea
-            className="textarea textarea-bordered md:col-span-2"
-            placeholder="Deskripsi"
-            rows={3}
-            value={newLayanan.deskripsi}
-            onChange={(e) =>
-              setNewLayanan({ ...newLayanan, deskripsi: e.target.value })
-            }
-          />
+          {/* Gambar */}
+          <div>
+            <label className="font-medium text-sm">Upload Gambar</label>
+            <input
+              type="file"
+              className="file-input file-input-bordered w-full mt-1"
+              onChange={(e) =>
+                setNewLayanan({ ...newLayanan, gambar: e.target.files[0] })
+              }
+            />
+          </div>
+
+          {/* CTA */}
+          <div>
+            <label className="font-medium text-sm">Link CTA</label>
+            <input
+              className="input input-bordered w-full mt-1"
+              placeholder="https://..."
+              value={newLayanan.url_cta}
+              onChange={(e) =>
+                setNewLayanan({ ...newLayanan, url_cta: e.target.value })
+              }
+            />
+          </div>
 
           <button
-            className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2"
+            className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] w-full"
             onClick={handleAdd}
           >
             + Tambah Layanan
@@ -117,7 +140,7 @@ const GeneralService = () => {
         </div>
       </div>
 
-      {/* Tabel */}
+      {/* Table */}
       <div className="overflow-x-auto bg-base-100 rounded-lg shadow">
         {loading ? (
           <div className="p-6 text-center">Memuat data layanan...</div>
@@ -138,7 +161,9 @@ const GeneralService = () => {
                   <tr key={item.id}>
                     <td className="font-semibold">{item.judul_layanan}</td>
                     <td className="max-w-xs truncate">{item.deskripsi}</td>
-                    <td className="truncate max-w-xs">{item.highlight || "-"}</td>
+                    <td className="max-w-xs truncate">
+                      {item.highlight || "-"}
+                    </td>
                     <td>
                       {item.url_cta ? (
                         <a
@@ -191,50 +216,67 @@ const GeneralService = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg space-y-4">
             <h2 className="text-xl font-semibold">Edit Layanan</h2>
 
-            <input
-              className="input input-bordered w-full"
-              placeholder="Judul Layanan"
-              value={editing.judul_layanan}
-              onChange={(e) =>
-                setEditing({ ...editing, judul_layanan: e.target.value })
-              }
-            />
+            {/* Judul */}
+            <div>
+              <label className="font-medium text-sm">Judul Layanan</label>
+              <input
+                className="input input-bordered w-full mt-1"
+                value={editing.judul_layanan}
+                onChange={(e) =>
+                  setEditing({ ...editing, judul_layanan: e.target.value })
+                }
+              />
+            </div>
 
-            <input
-              className="input input-bordered w-full"
-              placeholder="Highlight"
-              value={editing.highlight}
-              onChange={(e) =>
-                setEditing({ ...editing, highlight: e.target.value })
-              }
-            />
+            {/* Deskripsi */}
+            <div>
+              <label className="font-medium text-sm">Deskripsi</label>
+              <textarea
+                className="textarea textarea-bordered w-full mt-1"
+                rows={3}
+                value={editing.deskripsi}
+                onChange={(e) =>
+                  setEditing({ ...editing, deskripsi: e.target.value })
+                }
+              />
+            </div>
 
-            <input
-              className="input input-bordered w-full"
-              placeholder="Link CTA"
-              value={editing.url_cta}
-              onChange={(e) =>
-                setEditing({ ...editing, url_cta: e.target.value })
-              }
-            />
+            {/* Highlight */}
+            <div>
+              <label className="font-medium text-sm">Highlight</label>
+              <textarea
+                className="textarea textarea-bordered w-full mt-1"
+                rows={2}
+                value={editing.highlight}
+                onChange={(e) =>
+                  setEditing({ ...editing, highlight: e.target.value })
+                }
+              />
+            </div>
 
-            <textarea
-              className="textarea textarea-bordered w-full"
-              placeholder="Deskripsi"
-              value={editing.deskripsi}
-              onChange={(e) =>
-                setEditing({ ...editing, deskripsi: e.target.value })
-              }
-            />
+            {/* Gambar */}
+            <div>
+              <label className="font-medium text-sm">Upload Gambar Baru</label>
+              <input
+                type="file"
+                className="file-input file-input-bordered w-full mt-1"
+                onChange={(e) =>
+                  setEditing({ ...editing, gambar: e.target.files[0] })
+                }
+              />
+            </div>
 
-            {/* Upload Gambar Baru */}
-            <input
-              type="file"
-              className="file-input file-input-bordered w-full"
-              onChange={(e) =>
-                setEditing({ ...editing, gambar: e.target.files[0] })
-              }
-            />
+            {/* CTA */}
+            <div>
+              <label className="font-medium text-sm">Link CTA</label>
+              <input
+                className="input input-bordered w-full mt-1"
+                value={editing.url_cta}
+                onChange={(e) =>
+                  setEditing({ ...editing, url_cta: e.target.value })
+                }
+              />
+            </div>
 
             <div className="flex justify-end gap-2">
               <button className="btn btn-ghost" onClick={() => setEditing(null)}>

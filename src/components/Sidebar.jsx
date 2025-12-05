@@ -52,11 +52,11 @@ const Sidebar = ({ closeDrawer }) => {
           {[
             { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
             { to: "/dashboard/users", label: "Users", icon: Users },
-            { to: "/dashboard/general", label: "General Services", icon: Wrench },
-            { to: "/dashboard/business", label: "Business Services", icon: Layers },
-            { to: "/dashboard/partnerships", label: "Partnerships", icon: Handshake },
-            { to: "/dashboard/careers", label: "Careers", icon: Briefcase },
-            { to: "/dashboard/contact", label: "Contact Message", icon: Mail },
+            { to: "/dashboard/general", label: "Layanan Umum", icon: Wrench },
+            { to: "/dashboard/business", label: "Layanan Bisnis", icon: Layers },
+            { to: "/dashboard/partnerships", label: "Kemitraan", icon: Handshake },
+            { to: "/dashboard/careers", label: "Karir", icon: Briefcase },
+            { to: "/dashboard/contact", label: "Pesan Kontak", icon: Mail },
           ].map(({ to, label, icon: Icon }) => (
             <li key={to}>
               <NavLink

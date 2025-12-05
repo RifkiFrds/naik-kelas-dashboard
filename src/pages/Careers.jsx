@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useCareers } from "../hooks/useCareers";
 import { Briefcase, Link2, Edit2, Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
-import { Toast } from "../components/Toast"; 
 
 const Careers = () => {
   const {
@@ -19,7 +18,12 @@ const Careers = () => {
   } = useCareers();
 
   const [editCareer, setEditCareer] = useState(null);
-  const [form, setForm] = useState({ posisi: "", deskripsi: "", url_cta: "", status: "dibuka" });
+  const [form, setForm] = useState({
+    posisi: "",
+    deskripsi: "",
+    url_cta: "",
+    status: "dibuka",
+  });
 
   const openEditModal = (career) => {
     setEditCareer(career);
@@ -37,7 +41,6 @@ const Careers = () => {
     document.getElementById("edit_modal").close();
   };
 
-  // 🔹 konfirmasi hapus
   const confirmDelete = (id, posisi) => {
     Swal.fire({
       title: `Hapus lowongan "${posisi}"?`,
@@ -59,63 +62,69 @@ const Careers = () => {
 
   return (
     <div className="flex flex-col gap-6">
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
           <Briefcase className="w-8 h-8 text-[#FFBC41]" /> Manajemen Lowongan Karir
         </h1>
-        <div className="flex gap-2">
-          {/* Search Input */}
-          <label className="input input-bordered flex items-center gap-2">
-            <input
-              type="text"
-              className="grow bg-transparent focus:outline-none dark:text-gray-200"
-              placeholder="Cari layanan bisnis..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              className="w-4 h-4 opacity-70 dark:text-gray-400"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </label>
-        </div>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <input
+            type="text"
+            className="grow bg-transparent"
+            placeholder="Cari lowongan..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </label>
       </div>
 
       {/* Form Tambah Lowongan */}
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Tambah Lowongan</h2>
+        <h2 className="text-xl font-semibold">Tambah Lowongan</h2>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            className="input input-bordered w-full"
-            placeholder="Posisi Jabatan"
-            value={newCareer.posisi}
-            onChange={(e) => setNewCareer({ ...newCareer, posisi: e.target.value })}
-          />
-          <input
-            className="input input-bordered w-full"
-            placeholder="Link Apply (URL CTA)"
-            value={newCareer.url_cta}
-            onChange={(e) => setNewCareer({ ...newCareer, url_cta: e.target.value })}
-          />
-          <textarea
-            className="textarea textarea-bordered md:col-span-2"
-            placeholder="Deskripsi Singkat"
-            rows={3}
-            value={newCareer.deskripsi}
-            onChange={(e) => setNewCareer({ ...newCareer, deskripsi: e.target.value })}
-          />
-          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2" onClick={handleAdd}>
+
+          {/* Posisi */}
+          <div className="col-span-2">
+            <label className="text-sm font-medium">Posisi Jabatan</label>
+            <input
+              className="input input-bordered w-full mt-1"
+              placeholder="Contoh: Frontend Developer"
+              value={newCareer.posisi}
+              onChange={(e) => setNewCareer({ ...newCareer, posisi: e.target.value })}
+            />
+          </div>
+
+          {/* Deskripsi */}
+          <div className="col-span-2">
+            <label className="text-sm font-medium">Deskripsi Singkat</label>
+            <textarea
+              className="textarea textarea-bordered w-full mt-1"
+              placeholder="Tuliskan tugas, kualifikasi, dll."
+              rows={3}
+              value={newCareer.deskripsi}
+              onChange={(e) => setNewCareer({ ...newCareer, deskripsi: e.target.value })}
+            />
+          </div>
+
+          {/* CTA Link */}
+          <div className="col-span-2">
+            <label className="text-sm font-medium">Link Apply (URL CTA)</label>
+            <input
+              className="input input-bordered w-full mt-1"
+              placeholder="https://..."
+              value={newCareer.url_cta}
+              onChange={(e) => setNewCareer({ ...newCareer, url_cta: e.target.value })}
+            />
+          </div>
+
+          {/* Submit */}
+          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] col-span-2" onClick={handleAdd}>
             + Tambah Lowongan
           </button>
+
         </div>
       </div>
 
@@ -140,6 +149,8 @@ const Careers = () => {
                   <tr key={career.id}>
                     <td className="font-semibold">{career.posisi}</td>
                     <td className="max-w-xs truncate">{career.deskripsi}</td>
+
+                    {/* Status */}
                     <td>
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -153,6 +164,8 @@ const Careers = () => {
                         </span>
                       </label>
                     </td>
+
+                    {/* CTA */}
                     <td>
                       {career.url_cta ? (
                         <a
@@ -167,6 +180,8 @@ const Careers = () => {
                         "-"
                       )}
                     </td>
+
+                    {/* Action */}
                     <td className="flex justify-center gap-2">
                       <button
                         className="btn btn-sm btn-warning flex items-center gap-1"
@@ -185,9 +200,7 @@ const Careers = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center p-6">
-                    Tidak ada lowongan ditemukan.
-                  </td>
+                  <td colSpan="5" className="text-center p-6">Tidak ada lowongan ditemukan.</td>
                 </tr>
               )}
             </tbody>
@@ -199,24 +212,33 @@ const Careers = () => {
       <dialog id="edit_modal" className="modal">
         <div className="modal-box space-y-4">
           <h3 className="font-bold text-lg">Edit Lowongan</h3>
+
+          <label className="text-sm font-medium">Posisi Jabatan</label>
           <input
             className="input input-bordered w-full"
             placeholder="Posisi"
             value={form.posisi}
             onChange={(e) => setForm({ ...form, posisi: e.target.value })}
           />
+
+          <label className="text-sm font-medium">Deskripsi</label>
           <textarea
             className="textarea textarea-bordered w-full"
             placeholder="Deskripsi"
+            rows={3}
             value={form.deskripsi}
             onChange={(e) => setForm({ ...form, deskripsi: e.target.value })}
           />
+
+          <label className="text-sm font-medium">Link Apply</label>
           <input
             className="input input-bordered w-full"
-            placeholder="Link Apply"
+            placeholder="https://..."
             value={form.url_cta}
             onChange={(e) => setForm({ ...form, url_cta: e.target.value })}
           />
+
+          <label className="text-sm font-medium">Status</label>
           <select
             className="select select-bordered w-full"
             value={form.status}
@@ -225,16 +247,14 @@ const Careers = () => {
             <option value="dibuka">Dibuka</option>
             <option value="ditutup">Ditutup</option>
           </select>
+
           <div className="modal-action">
-            <button className="btn btn-primary" onClick={submitUpdate}>
-              Simpan
-            </button>
-            <form method="dialog">
-              <button className="btn">Batal</button>
-            </form>
+            <button className="btn btn-primary" onClick={submitUpdate}>Simpan</button>
+            <form method="dialog"><button className="btn">Batal</button></form>
           </div>
         </div>
       </dialog>
+
     </div>
   );
 };

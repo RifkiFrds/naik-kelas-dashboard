@@ -5,7 +5,7 @@ import { Toast } from "../components/Toast";
 export const useContact = () => {
   const [pesan, setPesan] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState(null); // pesan detail
+  const [selected, setSelected] = useState(null);
 
   const loadPesan = async () => {
     setLoading(true);
@@ -19,7 +19,7 @@ export const useContact = () => {
     }
   };
 
-   const handleRead = async (item) => {
+  const handleRead = async (item) => {
     try {
       if (!item.dibaca) {
         await markAsRead(item.id);
@@ -48,5 +48,14 @@ export const useContact = () => {
     loadPesan();
   }, []);
 
-  return { pesan, loading, selected, setSelected, handleRead, handleDelete };
+  // 🔥 Tambahkan totalCount agar bisa dipakai dashboard
+  return { 
+    pesan,
+    totalCount: pesan.length, 
+    loading,
+    selected,
+    setSelected,
+    handleRead,
+    handleDelete 
+  };
 };

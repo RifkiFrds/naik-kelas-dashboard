@@ -101,11 +101,11 @@ const Users = () => {
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <UserCog className="w-8 h-8 text-[#FFBC41]" />
-          Manajemen Pengguna
-        </h1>
-        <div className="flex gap-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex flex-wrap items-center gap-2">
+            <UserCog className="w-6 h-6 sm:w-8 sm:h-8 text-[#FFBC41]" />
+            Manajemen Pengguna
+          </h1>
+          <div className="flex gap-2">
           <label className="input input-bordered flex items-center gap-2">
             <input
               type="text"
