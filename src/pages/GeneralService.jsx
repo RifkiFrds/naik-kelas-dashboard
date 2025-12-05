@@ -19,7 +19,6 @@ const GeneralService = () => {
     handleDelete,
   } = useLayananUmum();
 
-  // 🔹 Konfirmasi hapus pakai SweetAlert
   const confirmDelete = (id, judul) => {
     Swal.fire({
       title: `Hapus layanan "${judul}"?`,
@@ -47,37 +46,22 @@ const GeneralService = () => {
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Wrench className="w-8 h-8 text-[#FFBC41]" /> Manajemen Layanan Umum
         </h1>
-        <div className="flex gap-2">
-          {/* Search Input */}
-          <label className="input input-bordered flex items-center gap-2">
-            <input
-              type="text"
-              className="grow bg-transparent focus:outline-none dark:text-gray-200"
-              placeholder="Cari layanan umum..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              className="w-4 h-4 opacity-70 dark:text-gray-400"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </label>
-        </div>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <input
+            type="text"
+            className="grow bg-transparent focus:outline-none dark:text-gray-200"
+            placeholder="Cari layanan umum..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </label>
       </div>
 
-      {/* Form Tambah Layanan */}
+      {/* Form Tambah */}
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-          Tambah Layanan
-        </h2>
+        <h2 className="text-xl font-semibold text-gray-900">Tambah Layanan</h2>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             className="input input-bordered w-full"
@@ -87,6 +71,7 @@ const GeneralService = () => {
               setNewLayanan({ ...newLayanan, judul_layanan: e.target.value })
             }
           />
+
           <input
             className="input input-bordered w-full"
             placeholder="Highlight"
@@ -95,6 +80,7 @@ const GeneralService = () => {
               setNewLayanan({ ...newLayanan, highlight: e.target.value })
             }
           />
+
           <input
             className="input input-bordered w-full md:col-span-2"
             placeholder="Link CTA"
@@ -103,6 +89,15 @@ const GeneralService = () => {
               setNewLayanan({ ...newLayanan, url_cta: e.target.value })
             }
           />
+
+          <input
+            type="file"
+            className="file-input file-input-bordered w-full md:col-span-2"
+            onChange={(e) =>
+              setNewLayanan({ ...newLayanan, gambar: e.target.files[0] })
+            }
+          />
+
           <textarea
             className="textarea textarea-bordered md:col-span-2"
             placeholder="Deskripsi"
@@ -112,13 +107,17 @@ const GeneralService = () => {
               setNewLayanan({ ...newLayanan, deskripsi: e.target.value })
             }
           />
-          <button className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2" onClick={handleAdd}>
+
+          <button
+            className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] md:col-span-2"
+            onClick={handleAdd}
+          >
             + Tambah Layanan
           </button>
         </div>
       </div>
 
-      {/* Tabel Layanan */}
+      {/* Tabel */}
       <div className="overflow-x-auto bg-base-100 rounded-lg shadow">
         {loading ? (
           <div className="p-6 text-center">Memuat data layanan...</div>
@@ -154,6 +153,7 @@ const GeneralService = () => {
                         "-"
                       )}
                     </td>
+
                     <td className="flex justify-center gap-2">
                       <button
                         className="btn btn-sm btn-warning flex items-center gap-1"
@@ -161,6 +161,7 @@ const GeneralService = () => {
                       >
                         <Edit2 size={14} /> Edit
                       </button>
+
                       <button
                         className="btn btn-sm btn-error flex items-center gap-1"
                         onClick={() =>
@@ -189,6 +190,7 @@ const GeneralService = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg space-y-4">
             <h2 className="text-xl font-semibold">Edit Layanan</h2>
+
             <input
               className="input input-bordered w-full"
               placeholder="Judul Layanan"
@@ -197,6 +199,7 @@ const GeneralService = () => {
                 setEditing({ ...editing, judul_layanan: e.target.value })
               }
             />
+
             <input
               className="input input-bordered w-full"
               placeholder="Highlight"
@@ -205,6 +208,7 @@ const GeneralService = () => {
                 setEditing({ ...editing, highlight: e.target.value })
               }
             />
+
             <input
               className="input input-bordered w-full"
               placeholder="Link CTA"
@@ -213,6 +217,7 @@ const GeneralService = () => {
                 setEditing({ ...editing, url_cta: e.target.value })
               }
             />
+
             <textarea
               className="textarea textarea-bordered w-full"
               placeholder="Deskripsi"
@@ -221,6 +226,16 @@ const GeneralService = () => {
                 setEditing({ ...editing, deskripsi: e.target.value })
               }
             />
+
+            {/* Upload Gambar Baru */}
+            <input
+              type="file"
+              className="file-input file-input-bordered w-full"
+              onChange={(e) =>
+                setEditing({ ...editing, gambar: e.target.files[0] })
+              }
+            />
+
             <div className="flex justify-end gap-2">
               <button className="btn btn-ghost" onClick={() => setEditing(null)}>
                 Batal

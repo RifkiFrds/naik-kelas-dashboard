@@ -18,7 +18,7 @@ const SCHEMA_FIELDS = {
     "fitur_unggulan",
     "url_cta",
   ],
-  reseller: [
+  jasa_recruitment: [
     "type",
     "judul_bisnis",
     "gambar",
@@ -41,7 +41,6 @@ const SCHEMA_FIELDS = {
     "deskripsi",
     "tanggal_acara",
     "waktu_mulai",
-    "nama_mentor",
     "fitur_unggulan",
     "url_cta",
   ],
