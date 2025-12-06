@@ -182,7 +182,7 @@ const DashboardHome = () => {
                   <tr key={msg.id}>
                     <td className="font-semibold text-gray-700">{msg.nama}</td>
                     <td className="text-gray-500">{msg.email}</td>
-                    <td className="text-sm text-gray-500">{formatMessageDate(msg.dibaca || msg.created_at)}</td>
+                    <td className="text-sm text-gray-500">{formatMessageDate(msg.dikirim)}</td>
                     <td>
                       {msg.dibaca ? (
                         <span className="badge badge-success badge-outline">Dibaca</span>
