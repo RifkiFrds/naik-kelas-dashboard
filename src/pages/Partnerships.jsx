@@ -44,7 +44,9 @@ const Partnerships = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
-          <Handshake className="w-8 h-8 text-[#FFBC41]" /> Manajemen Kemitraan
+           <span className="bg-[#FFBC41] text-white p-2 rounded-xl shadow-lg shadow-orange-200">
+          <Handshake className="w-8 h-8 text-gray-100" /></span>
+           Manajemen Kemitraan
         </h1>
 
         <label className="input input-bordered flex items-center gap-2">
@@ -60,7 +62,10 @@ const Partnerships = () => {
 
       {/* Form Tambah Paket */}
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-lg font-semibold text-gray-700">Tambah Paket Kemitraan</h2>
+        <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <span className="w-1 h-6 bg-[#FFBC41] rounded-full"></span>
+            Tambah Paket Kemitraan
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
           {/* Nama Paket */}

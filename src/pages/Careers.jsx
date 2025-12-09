@@ -66,7 +66,9 @@ const Careers = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
-          <Briefcase className="w-8 h-8 text-[#FFBC41]" /> Manajemen Lowongan Karir
+         <span className="bg-[#FFBC41] text-white p-2 rounded-xl shadow-lg shadow-orange-200">
+          <Briefcase className="w-8 h-8 text-gray-100" /></span>
+          Manajemen Lowongan Karir
         </h1>
 
         <label className="input input-bordered flex items-center gap-2">
@@ -82,7 +84,10 @@ const Careers = () => {
 
       {/* Form Tambah Lowongan */}
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold">Tambah Lowongan</h2>
+        <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <span className="w-1 h-6 bg-[#FFBC41] rounded-full"></span>
+            Tambah Lowongan Kerja
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 

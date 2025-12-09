@@ -39,7 +39,7 @@ const BusinessService = () => {
     });
   };
 
-  /** 🔧 Dynamic Input Berdasarkan Type */
+  /** Dynamic Input Berdasarkan Type */
   const renderFields = (state, setState) => {
     switch (state.type) {
       case "trading":
@@ -53,43 +53,9 @@ const BusinessService = () => {
             >
               <option value="">-- Pilih --</option>
               <option value="Internasional">Internasional</option>
-              <option value="Nasional">Nasional</option>
+              <option value="Nasional">Lokal</option>
             </select>
           </div>
-        );
-
-      case "webinar":
-        return (
-          <>
-            <div>
-              <label className="text-sm font-medium">Tanggal Event</label>
-              <input
-                type="date"
-                className="input input-bordered w-full mt-1"
-                value={state.tanggal_acara || ""}
-                onChange={(e) => setState({ ...state, tanggal_acara: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Waktu</label>
-              <input
-                type="time"
-                className="input input-bordered w-full mt-1"
-                value={state.waktu_mulai || ""}
-                onChange={(e) => setState({ ...state, waktu_mulai: e.target.value })}
-              />
-            </div>
-            <div className="col-span-2">
-              <label className="text-sm font-medium">Harga</label>
-              <input
-                type="number"
-                className="input input-bordered w-full mt-1"
-                placeholder="Contoh: 100000"
-                value={state.harga || ""}
-                onChange={(e) => setState({ ...state, harga: e.target.value })}
-              />
-            </div>
-          </>
         );
 
       default:
@@ -106,7 +72,9 @@ const BusinessService = () => {
     case "modul_bisnis":
       return "Modul Bisnis";
     case "webinar":
-      return "Webinar / Workshop";
+      return "Webinar";
+    case "workshop":
+      return "Workshop";
     default:
       return type;
   }
@@ -119,7 +87,8 @@ const BusinessService = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
-          <Wrench className="w-8 h-8 text-[#FFBC41]" /> Manajemen Layanan Bisnis
+          <span className="bg-[#FFBC41] text-white p-2 rounded-xl shadow-lg shadow-orange-200"> <Wrench className="w-8 h-8 text-gray-100" /></span>
+          Manajemen Layanan Bisnis
         </h1>
         <label className="input input-bordered flex items-center gap-2">
           <input
@@ -134,7 +103,10 @@ const BusinessService = () => {
 
       {/* Form Tambah */}
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold">Tambah Layanan</h2>
+        <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <span className="w-1 h-6 bg-[#FFBC41] rounded-full"></span>
+            Tambah Layanan
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -150,22 +122,25 @@ const BusinessService = () => {
               <option value="trading">Broker Trading</option>
               <option value="jasa_recruitment">Jasa Recruitment</option>
               <option value="modal_bisnis">Modul Bisnis</option>
-              <option value="webinar">Webinar / Workshop</option>
+              <option value="webinar">Webinar</option>
+              <option value="workshop">Workshop</option>
             </select>
           </div>
 
           {renderFields(newLayanan, setNewLayanan)}
 
           {/* Judul */}
-          <div className="col-span-2">
-            <label className="text-sm font-medium">Judul</label>
-            <input
-              className="input input-bordered w-full mt-1"
-              value={newLayanan.judul_bisnis || ""}
-              placeholder="Masukkan Judul"
-              onChange={(e) => setNewLayanan({ ...newLayanan, judul_bisnis: e.target.value })}
-            />
-          </div>
+          {newLayanan.type !== "trading" && (
+            <div className="col-span-2">
+              <label className="text-sm font-medium">Judul</label>
+              <input
+                className="input input-bordered w-full mt-1"
+                value={newLayanan.judul_bisnis || ""}
+                placeholder="Masukkan Judul"
+                onChange={(e) => setNewLayanan({ ...newLayanan, judul_bisnis: e.target.value })}
+              />
+            </div>
+          )}
 
           {/* Deskripsi */}
           <div className="col-span-2">

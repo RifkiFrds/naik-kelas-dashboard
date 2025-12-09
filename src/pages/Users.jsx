@@ -102,7 +102,9 @@ const Users = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex flex-wrap items-center gap-2">
-            <UserCog className="w-6 h-6 sm:w-8 sm:h-8 text-[#FFBC41]" />
+          <span className="bg-[#FFBC41] text-white p-2 rounded-xl shadow-lg shadow-orange-200">
+            <UserCog className="w-6 h-6 sm:w-8 sm:h-8 text-gray-100" />
+            </span>
             Manajemen Pengguna
           </h1>
           <div className="flex gap-2">
@@ -120,8 +122,9 @@ const Users = () => {
 
       {/* Form Tambah Admin */}
       <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow space-y-3">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-          Tambah Admin
+       <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <span className="w-1 h-6 bg-[#FFBC41] rounded-full"></span>
+            Tambah Admin
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input

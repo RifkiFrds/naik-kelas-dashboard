@@ -7,6 +7,7 @@ import {
   Handshake,
   Briefcase,
   LogOut,
+  Calendar,
   Layers,
   Mail
 } from "lucide-react";
@@ -31,7 +32,7 @@ const Sidebar = ({ closeDrawer }) => {
             <img
               src="/logo.png"
               alt="logo"
-              className="w-14 h-14 object-cover"
+              className="w-19 h-16 object-cover"
             />
           </div>
         </div>
@@ -55,6 +56,7 @@ const Sidebar = ({ closeDrawer }) => {
             { to: "/dashboard/general", label: "Layanan Umum", icon: Wrench },
             { to: "/dashboard/business", label: "Layanan Bisnis", icon: Layers },
             { to: "/dashboard/partnerships", label: "Kemitraan", icon: Handshake },
+            { to: "/dashboard/events", label: "Acara", icon: Calendar },
             { to: "/dashboard/careers", label: "Karir", icon: Briefcase },
             { to: "/dashboard/contact", label: "Pesan Kontak", icon: Mail },
           ].map(({ to, label, icon: Icon }) => (

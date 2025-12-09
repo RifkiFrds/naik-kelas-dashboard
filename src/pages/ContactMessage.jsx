@@ -38,7 +38,9 @@ const ContactMessage = () => {
     <div className="flex flex-col gap-6">
       {/* Header */}
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
-        <Mail className="w-8 h-8 text-[#FFBC41] inline-block mr-2" /> Manajemen Pesan Kontak
+        <span className="bg-[#FFBC41] text-white p-2 rounded-xl shadow-lg shadow-orange-200">
+        <Mail className="w-8 h-8 text-gray-100" /></span>
+        Manajemen Pesan Kontak
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -108,6 +110,9 @@ const ContactMessage = () => {
                     {selected.nomor_telepon}
                   </p>
                 )}
+                <p>
+                 <span className="font-medium">Layanan:</span> {selected.jenis_layanan}
+                </p>
                 <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <p className="whitespace-pre-line">{selected.pesan}</p>
                 </div>

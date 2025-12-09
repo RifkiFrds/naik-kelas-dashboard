@@ -45,7 +45,10 @@ const GeneralService = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
-          <Wrench className="w-8 h-8 text-[#FFBC41]" /> Manajemen Layanan Umum
+          <span className="bg-[#FFBC41] text-white p-2 rounded-xl shadow-lg shadow-orange-200">
+          <Wrench className="w-8 h-8 text-gray-100" /> 
+          </span>
+          Manajemen Layanan Umum
         </h1>
 
         <label className="input input-bordered flex items-center gap-2">
@@ -61,7 +64,10 @@ const GeneralService = () => {
 
       {/* Form Tambah */}
       <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold text-gray-900">Tambah Layanan</h2>
+         <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <span className="w-1 h-6 bg-[#FFBC41] rounded-full"></span>
+            Tambah Layanan
+        </h2>
 
         <div className="space-y-4">
 
@@ -149,6 +155,7 @@ const GeneralService = () => {
             <thead>
               <tr>
                 <th>Judul</th>
+                <th>Gambar</th>
                 <th>Deskripsi</th>
                 <th>Highlight</th>
                 <th>Link</th>
@@ -160,6 +167,11 @@ const GeneralService = () => {
                 layanan.map((item) => (
                   <tr key={item.id}>
                     <td className="font-semibold">{item.judul_layanan}</td>
+                     <td>
+                      {item.gambar_url ? (
+                        <img src={item.gambar_url} className="w-16 h-16 object-cover rounded" />
+                      ) : "-"}
+                    </td>
                     <td className="max-w-xs truncate">{item.deskripsi}</td>
                     <td className="max-w-xs truncate">
                       {item.highlight || "-"}
@@ -200,7 +212,7 @@ const GeneralService = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center p-6">
+                  <td colSpan="6" className="text-center p-6">
                     Tidak ada layanan ditemukan.
                   </td>
                 </tr>
