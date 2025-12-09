@@ -5,6 +5,7 @@ import { getPartnerships } from "../services/partnershipService";
 import { getLayananUmum } from "../services/layananUmumService";
 import { getLayananBisnis } from "../services/layananBisnisService";
 import { getPesanKontak } from "../services/contactService";
+import { getEvent } from "../services/eventService"; 
 
 // Format nama type layanan
 const formatTypeName = (raw) =>
@@ -14,7 +15,7 @@ const formatTypeName = (raw) =>
         .replace(/_/g, " ")
         .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 
-// Format tanggal pesan
+// Format tanggal pesan / event
 export const formatMessageDate = (date) => {
   if (!date) return "-";
   try {
@@ -42,6 +43,9 @@ export const useDashboard = () => {
   const [careerStatusData, setCareerStatusData] = useState([]);
   const [recentMessages, setRecentMessages] = useState([]);
 
+  // ⬇️ NEW STATE FOR EVENTS
+  const [upcomingEvent, setUpcomingEvent] = useState([]);
+
   useEffect(() => {
     fetchDashboardData();
   }, []);
@@ -49,16 +53,27 @@ export const useDashboard = () => {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const [users, careers, partnerships, layUmum, layBisnis, contacts] =
-        await Promise.all([
-          getUsers().catch(() => []),
-          getCareers().catch(() => []),
-          getPartnerships().catch(() => []),
-          getLayananUmum().catch(() => []),
-          getLayananBisnis().catch(() => []),
-          getPesanKontak().catch(() => []),
-        ]);
+      const [
+        users,
+        careers,
+        partnerships,
+        layUmum,
+        layBisnis,
+        contacts,
+        events,
+      ] = await Promise.all([
+        getUsers().catch(() => []),
+        getCareers().catch(() => []),
+        getPartnerships().catch(() => []),
+        getLayananUmum().catch(() => []),
+        getLayananBisnis().catch(() => []),
+        getPesanKontak().catch(() => []),
+        getEvent().catch(() => []), 
+      ]);
 
+      // -------------------------
+      // STATS CARD TOTALS
+      // -------------------------
       setStats({
         users: users?.length || 0,
         careers: careers?.length || 0,
@@ -66,7 +81,9 @@ export const useDashboard = () => {
         services: (layUmum?.length || 0) + (layBisnis?.length || 0),
       });
 
-      // Chart Layanan
+      // -------------------------
+      // CHART LAYANAN BISNIS
+      // -------------------------
       if (layBisnis?.length > 0) {
         const typeCounts = layBisnis.reduce((acc, curr) => {
           const name = formatTypeName(curr.type);
@@ -81,7 +98,9 @@ export const useDashboard = () => {
         );
       }
 
-      // Chart Karir
+      // -------------------------
+      // CHART STATUS KARIR
+      // -------------------------
       if (careers?.length > 0) {
         const opened = careers.filter((c) => c.status === "dibuka").length;
         const closed = careers.length - opened;
@@ -95,10 +114,22 @@ export const useDashboard = () => {
         );
       }
 
-      // Pesan Terbaru
+      // -------------------------
+      // PESAN KONTAK TERBARU (LIMIT 5)
+      // -------------------------
       if (contacts?.length > 0) {
         const sorted = [...contacts].sort((a, b) => b.id - a.id);
         setRecentMessages(sorted.slice(0, 5));
+      }
+
+      // -------------------------
+      // UPCOMING EVENTS (LIMIT 3)
+      // -------------------------
+      if (events?.length > 0) {
+        const sorted = [...events].sort(
+          (a, b) => new Date(a.tanggal_mulai) - new Date(b.tanggal_mulai)
+        );
+        setUpcomingEvent(sorted.slice(0, 3));
       }
     } finally {
       setLoading(false);
@@ -111,6 +142,7 @@ export const useDashboard = () => {
     businessTypeData,
     careerStatusData,
     recentMessages,
+    upcomingEvent, // ⬅️ Jangan lupa return
     formatMessageDate,
   };
 };

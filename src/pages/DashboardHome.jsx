@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import StatCards from "../components/StatsCard";
 import { useDashboard, formatMessageDate } from "../hooks/useDashboard";
 import { useContact } from "../hooks/useContact";
-import { Layers, PieChart as PieChartIcon, Mail } from "lucide-react";
+import { Layers, PieChart as PieChartIcon, Mail, Calendar, ArrowRight } from "lucide-react";
 import {
   ResponsiveContainer,
   CartesianGrid,
@@ -32,6 +32,7 @@ const DashboardHome = () => {
     stats,
     businessTypeData,
     careerStatusData,
+    upcomingEvent,
     recentMessages,
   } = useDashboard();
 
@@ -135,6 +136,62 @@ const DashboardHome = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* UPCOMING EVENTS */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100"
+      >
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-yellow-500" />
+              Event Terdekat
+            </h2>
+            <p className="text-xs text-gray-500">Jangan lewatkan event menarik!</p>
+          </div>
+
+          <Link to="/dashboard/event" className="btn btn-sm btn-ghost text-blue-600 hover:bg-blue-50">
+            Lihat Semua
+          </Link>
+        </div>
+
+          {upcomingEvent?.length ? (
+            <div className="grid md:grid-cols-3 gap-4">
+              {upcomingEvent.map((ev) => (
+                <div
+                  key={ev.id}
+                  className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm hover:shadow-md transition duration-300"
+                >
+                  <h3 className="font-semibold text-gray-800 line-clamp-1">
+                    {ev.judul}
+                  </h3>
+                  <p className="text-xs text-gray-500 line-clamp-2 mt-1">{ev.deskripsi}</p>
+
+                  <div className="mt-3 flex items-center justify-between text-xs text-gray-600">
+                    <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md font-medium text-[11px]">
+                      {formatMessageDate(ev.tanggal_mulai)}
+                    </span>
+                   <Link
+                      to={`/dashboard/events`}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 border border-blue-500 text-blue-600 text-xs font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition-all"
+                    >
+                      Detail Event
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-gray-400 text-center py-8 italic">
+              Belum ada event yang dijadwalkan.
+            </div>
+          )}
+        </motion.div>
+
 
       {/* PESAN TERBARU */}
       <motion.div
