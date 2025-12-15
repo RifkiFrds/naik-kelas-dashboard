@@ -201,7 +201,7 @@ const EventPage = () => {
                 onChange={(e) => setEditing({ ...editing, type: e.target.value })}
               >
                 <option value="umum">Umum</option>
-                <option value="internal">Aacara</option>
+                <option value="acara">Acara</option>
               </select>
 
               <input
