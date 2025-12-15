@@ -85,6 +85,22 @@ const EventPage = () => {
             <option value="tutup">Tutup</option>
           </select>
 
+          <select
+            className="select select-bordered w-full"
+            value={newEvent.type}
+            onChange={(e) => setNewEvent({ ...newEvent, type: e.target.value })}
+          >
+            <option value="umum">Umum</option>
+            <option value="acara">Acara</option>
+          </select>
+
+          <input
+            className="input input-bordered w-full"
+            placeholder="URL CTA (opsional)"
+            value={newEvent.url_cta}
+            onChange={(e) => setNewEvent({ ...newEvent, url_cta: e.target.value })}
+          />
+
           <textarea className="textarea textarea-bordered w-full sm:col-span-2" rows={3} placeholder="Deskripsi Event..." value={newEvent.deskripsi} onChange={(e) => setNewEvent({ ...newEvent, deskripsi: e.target.value })} />
           <input type="file" className="file-input file-input-bordered w-full sm:col-span-2" onChange={(e) => setNewEvent({ ...newEvent, gambar_poster: e.target.files[0] })} />
         </div>
@@ -179,8 +195,24 @@ const EventPage = () => {
                 <option value="tutup">Tutup</option>
               </select>
 
-              <textarea className="textarea textarea-bordered sm:col-span-2" rows={3} value={editing.deskripsi} onChange={(e) => setEditing({ ...editing, deskripsi: e.target.value })} />
-              <input type="file" className="file-input file-input-bordered sm:col-span-2" onChange={(e) => setEditing({ ...editing, gambar_poster: e.target.files[0] })} />
+              <select
+                className="select select-bordered w-full"
+                value={editing.type}
+                onChange={(e) => setEditing({ ...editing, type: e.target.value })}
+              >
+                <option value="umum">Umum</option>
+                <option value="internal">Aacara</option>
+              </select>
+
+              <input
+                className="input input-bordered w-full"
+                placeholder="URL CTA (opsional)"
+                value={editing.url_cta}
+                onChange={(e) => setEditing({ ...editing, url_cta: e.target.value })}
+              />
+
+              <textarea className="textarea textarea-bordered w-full sm:col-span-2" rows={3} value={editing.deskripsi} onChange={(e) => setEditing({ ...editing, deskripsi: e.target.value })} />
+              <input type="file" className="file-input file-input-bordered w-full sm:col-span-2" onChange={(e) => setEditing({ ...editing, gambar_poster: e.target.files[0] })} />
             </div>
 
             <div className="flex justify-end gap-2">

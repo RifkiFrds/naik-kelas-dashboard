@@ -13,11 +13,14 @@ export const useEvent = () => {
   const [newEvent, setNewEvent] = useState({
     judul: "",
     deskripsi: "",
+    type: "umum",
     tanggal_mulai: "",
     waktu_mulai: "",
     gambar_poster: null,
     status: "buka",
+    url_cta: "",
   });
+
 
   useEffect(() => {
     loadEvent();
@@ -62,9 +65,11 @@ export const useEvent = () => {
       setNewEvent({
         judul: "",
         deskripsi: "",
+        url_cta: "",
         tanggal_mulai: "",
         waktu_mulai: "",
         gambar_poster: null,
+        type: "umum",
         status: "buka",
       });
       loadEvent();
