@@ -53,7 +53,7 @@ const BusinessService = () => {
             >
               <option value="">-- Pilih --</option>
               <option value="Internasional">Internasional</option>
-              <option value="Nasional">Lokal</option>
+              <option value="Lokal">Lokal</option>
             </select>
           </div>
         );
@@ -63,6 +63,7 @@ const BusinessService = () => {
     }
   };
 
+  
   const getTypeLabel = (type) => {
   switch (type) {
     case "trading":
@@ -119,11 +120,11 @@ const BusinessService = () => {
               onChange={(e) => setNewLayanan({ ...newLayanan, type: e.target.value })}
             >
               <option value="">-- Pilih --</option>
-              <option value="trading">Broker Trading</option>
-              <option value="jasa_recruitment">Jasa Recruitment</option>
-              <option value="modal_bisnis">Modul Bisnis</option>
-              <option value="webinar">Webinar</option>
-              <option value="workshop">Workshop</option>
+              <option value="Trading">Broker Trading</option>
+              <option value="Jasa Recruitment">Jasa Recruitment</option>
+              <option value="Modul Bisnis">Modul Bisnis</option>
+              <option value="Webinar">Webinar</option>
+              <option value="Workshop">Workshop</option>
             </select>
           </div>
 
@@ -250,83 +251,79 @@ const BusinessService = () => {
         )}
       </div>
 
-      {/* Modal Edit */}
+ {/* MODAL EDIT */}
       {editing && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-2xl space-y-4">
-            <h2 className="text-xl font-semibold">Edit Layanan</h2>
+          <div className="bg-white p-6 rounded-lg w-full max-w-xl space-y-4">
 
-            {/* Tipe */}
-            <label className="text-sm font-medium">Pilih Tipe</label>
-            <select
-              className="select select-bordered w-full"
-              value={editing.type}
-              onChange={(e) => setEditing({ ...editing, type: e.target.value })}
-            >
-              <option value="trading">Trading</option>
-              <option value="jasa_recruitment">Jasa Recruitment</option>
-              <option value="modal_bisnis">Modul Bisnis</option>
-              <option value="webinar">Webinar</option>
-            </select>
+            <h2 className="text-xl font-bold">Edit Layanan</h2>
 
-            {renderFields(editing, setEditing)}
-
+            {/* TYPE LOCKED */}
             <input
-              className="input input-bordered w-full"
-              placeholder="Judul Bisnis"
-              value={editing.judul_bisnis}
-              onChange={(e) => setEditing({ ...editing, judul_bisnis: e.target.value })}
+              className="input input-bordered w-full bg-gray-100 cursor-not-allowed"
+              value={editing.type}
+              disabled
             />
+
+            {/* JUDUL */}
+            {editing.type !== "trading" && (
+              <input
+                className="input input-bordered w-full"
+                placeholder="Judul"
+                value={editing.judul_bisnis || ""}
+                onChange={(e) =>
+                  setEditing({ ...editing, judul_bisnis: e.target.value })
+                }
+              />
+            )}
 
             <textarea
               className="textarea textarea-bordered w-full"
               placeholder="Deskripsi"
-              rows={3}
-              value={editing.deskripsi}
-              onChange={(e) => setEditing({ ...editing, deskripsi: e.target.value })}
+              value={editing.deskripsi || ""}
+              onChange={(e) =>
+                setEditing({ ...editing, deskripsi: e.target.value })
+              }
             />
 
             <textarea
               className="textarea textarea-bordered w-full"
               placeholder="Fitur Unggulan"
-              rows={3}
-              value={editing.fitur_unggulan}
-              onChange={(e) => setEditing({ ...editing, fitur_unggulan: e.target.value })}
+              value={editing.fitur_unggulan || ""}
+              onChange={(e) =>
+                setEditing({ ...editing, fitur_unggulan: e.target.value })
+              }
             />
 
             <input
               type="file"
               className="file-input file-input-bordered w-full"
-              onChange={(e) => setEditing({ ...editing, gambar: e.target.files[0] })}
+              onChange={(e) =>
+                setEditing({ ...editing, gambar: e.target.files[0] })
+              }
             />
-
-            <div className="flex items-center gap-3">
-              <img
-                src={
-                  editing.gambar instanceof File
-                    ? URL.createObjectURL(editing.gambar)
-                    : editing.gambar_url || "/default.jpg"
-                }
-                className="w-20 h-20 rounded object-cover border"
-              />
-              <span className="text-sm text-gray-500">Preview Gambar</span>
-            </div>
 
             <input
               className="input input-bordered w-full"
-              placeholder="CTA Link"
-              value={editing.url_cta}
-              onChange={(e) => setEditing({ ...editing, url_cta: e.target.value })}
+              placeholder="URL CTA"
+              value={editing.url_cta || ""}
+              onChange={(e) =>
+                setEditing({ ...editing, url_cta: e.target.value })
+              }
             />
 
             <div className="flex justify-end gap-2">
-              <button className="btn" onClick={() => setEditing(null)}>Batal</button>
-              <button className="btn btn-primary" onClick={handleUpdate}>Simpan</button>
+              <button className="btn" onClick={() => setEditing(null)}>
+                Batal
+              </button>
+              <button className="btn btn-primary" onClick={handleUpdate}>
+                Simpan
+              </button>
             </div>
+
           </div>
         </div>
       )}
-
     </div>
   );
 };
