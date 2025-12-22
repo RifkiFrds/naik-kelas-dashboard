@@ -6,6 +6,13 @@ const TrixEditor = ({ initialValue = "", onChange }) => {
   const inputRef = useRef(null);
 
   useEffect(() => {
+  if (editorRef.current && initialValue) {
+    editorRef.current.innerHTML = initialValue;
+  }
+}, [initialValue]);
+
+
+  useEffect(() => {
     const editor = editorRef.current;
 
     if (!editor) return;

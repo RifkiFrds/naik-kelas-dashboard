@@ -177,15 +177,15 @@ const ArtikelPage = () => {
                 {/* FULL CONTENT */}
                 {openContentId === a.id && (
                  <div
-  className="
-    prose prose-sm max-w-none
-    prose-ul:list-disc prose-ol:list-decimal
-    prose-p:my-2
-    whitespace-pre-wrap break-words
-    mt-3 border-t pt-3
-  "
-  dangerouslySetInnerHTML={{ __html: a.content }}
-/>
+                  className="
+                    prose prose-sm max-w-none
+                    prose-ul:list-disc prose-ol:list-decimal
+                    prose-p:my-2
+                    whitespace-pre-wrap break-words
+                    mt-3 border-t pt-3
+                  "
+                  dangerouslySetInnerHTML={{ __html: a.content }}
+                />
 
                 )}
 
@@ -224,12 +224,14 @@ const ArtikelPage = () => {
             />
 
             {/* TRIX EDIT MODE (INITIAL VALUE!) */}
-            <TrixEditor
-              initialValue={editing.content}
-              onChange={(html) =>
-                setEditing({ ...editing, content: html })
-              }
-            />
+           <TrixEditor
+  key={editing.id}   
+  initialValue={editing.content}
+  onChange={(html) =>
+    setEditing({ ...editing, content: html })
+  }
+/>
+
 
             <div className="flex justify-end gap-2">
               <button onClick={() => setEditing(null)}>Batal</button>
