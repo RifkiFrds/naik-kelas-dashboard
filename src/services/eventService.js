@@ -54,7 +54,6 @@ export const updateEvent = async (id, data) => {
 };
 
 
-
 // DELETE event
 export const deleteEvent = async (id) => {
   return await api.delete(`/event/${id}`);

@@ -10,6 +10,7 @@ import GeneralService from "../pages/GeneralService";
 import BusinessService from "../pages/BusinessService";
 import Partnerships from "../pages/Partnerships";
 import Events from "../pages/Events";
+import Artikel from "../pages/Artikel";
 import ContactMessage from "../pages/ContactMessage";
 import Settings from "../pages/Settings";
 import NotFound from "../pages/NotFound";
@@ -48,6 +49,7 @@ export default function AppRoutes() {
           <Route path="business" element={<BusinessService />} />
           <Route path="partnerships" element={<Partnerships />} />
           <Route path="events" element={<Events />} />
+          <Route path="artikel" element={<Artikel />} />
           <Route path="contact" element={<ContactMessage />} />
           <Route path="settings" element={<Settings />} />
         </Route>

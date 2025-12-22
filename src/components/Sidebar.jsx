@@ -9,6 +9,7 @@ import {
   LogOut,
   Calendar,
   Layers,
+  Newspaper,
   Mail
 } from "lucide-react";
 
@@ -57,6 +58,7 @@ const Sidebar = ({ closeDrawer }) => {
             { to: "/dashboard/business", label: "Layanan Bisnis", icon: Layers },
             { to: "/dashboard/partnerships", label: "Kemitraan", icon: Handshake },
             { to: "/dashboard/events", label: "Acara", icon: Calendar },
+            { to: "/dashboard/artikel", label: "Artikel", icon: Newspaper },
             { to: "/dashboard/careers", label: "Karir", icon: Briefcase },
             { to: "/dashboard/contact", label: "Pesan Kontak", icon: Mail },
           ].map(({ to, label, icon: Icon }) => (
