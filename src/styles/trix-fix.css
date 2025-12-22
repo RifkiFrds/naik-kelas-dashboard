@@ -1,0 +1,60 @@
+/* =========================
+   FIX TRIX + TAILWIND
+========================= */
+
+/* Toolbar */
+trix-toolbar {
+  display: block !important;
+}
+
+/* Editor area */
+trix-editor {
+  min-height: 200px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Paragraph spacing */
+trix-editor p {
+  margin: 0 0 1em;
+}
+
+/* Heading */
+trix-editor h1,
+trix-editor h2,
+trix-editor h3 {
+  font-weight: bold;
+  margin: 1em 0 0.5em;
+}
+
+/* List */
+trix-editor ul,
+trix-editor ol {
+  padding-left: 1.5rem;
+  list-style: revert;
+}
+
+/* Bold / Italic */
+trix-editor strong {
+  font-weight: bold;
+}
+
+trix-editor em {
+  font-style: italic;
+}
+
+/* Fix Tailwind reset */
+trix-editor * {
+  all: revert;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+

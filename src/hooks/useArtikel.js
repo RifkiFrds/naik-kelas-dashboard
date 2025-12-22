@@ -12,17 +12,16 @@ export const useArtikel = () => {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
 
+  
   const [newArtikel, setNewArtikel] = useState({
     judul: "",
-    deskripsi: "",
+    excerpt: "",
+    content: "",
     tanggal_terbit: "",
     url_cta: "",
     gambar: null,
   });
 
-  /* =========================
-     LOAD
-  ========================= */
   const loadArtikel = async () => {
     setLoading(true);
     try {
@@ -39,20 +38,16 @@ export const useArtikel = () => {
     loadArtikel();
   }, []);
 
-  /* =========================
-     CREATE
-  ========================= */
+  console.log("CONTENT HTML:", newArtikel.content);
+
   const handleAdd = async () => {
     try {
-      console.group("🧪 CREATE DEBUG");
-      console.log("STATE:", newArtikel);
-      console.groupEnd();
-
       await createArtikel(newArtikel);
       Toast.success("Artikel berhasil ditambahkan");
       setNewArtikel({
         judul: "",
-        deskripsi: "",
+        excerpt: "",
+        content: "",
         tanggal_terbit: "",
         url_cta: "",
         gambar: null,
@@ -63,18 +58,10 @@ export const useArtikel = () => {
     }
   };
 
-  /* =========================
-     UPDATE
-  ========================= */
   const handleUpdate = async () => {
     if (!editing) return;
 
     try {
-      console.group("🧪 UPDATE DEBUG");
-      console.log("EDITING RAW:", editing);
-      console.log("gambar instanceof File:", editing.gambar instanceof File);
-      console.groupEnd();
-
       await updateArtikel(editing.id, editing);
       Toast.success("Artikel berhasil diperbarui");
       setEditing(null);
@@ -84,9 +71,6 @@ export const useArtikel = () => {
     }
   };
 
-  /* =========================
-     DELETE
-  ========================= */
   const handleDelete = async (id) => {
     try {
       await deleteArtikel(id);

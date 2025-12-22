@@ -2,33 +2,22 @@ import api from "../api/api";
 
 const fixDate = (date) => {
   if (!date) return "";
-
-  // jika ISO string
-  if (date.includes("T")) {
-    date = date.split("T")[0];
-  }
-
-  const [year, month, day] = date.split("-");
-  return `${day}-${month}-${year}`;
+  if (date.includes("T")) date = date.split("T")[0];
+  const [y, m, d] = date.split("-");
+  return `${d}-${m}-${y}`;
 };
 
-
-/* =========================
-   GET
-========================= */
 export const getArtikel = async () => {
   const res = await api.get("/artikel");
   return res.data.data;
 };
 
-/* =========================
-   CREATE
-========================= */
 export const createArtikel = async (data) => {
   const form = new FormData();
 
   form.append("judul", data.judul);
-  form.append("deskripsi", data.deskripsi);
+  form.append("excerpt", data.excerpt);
+  form.append("content", data.content);
   form.append("tanggal_terbit", fixDate(data.tanggal_terbit));
   form.append("url_cta", data.url_cta || "");
 
@@ -36,10 +25,12 @@ export const createArtikel = async (data) => {
     form.append("gambar", data.gambar);
   }
 
-  // DEBUG PAYLOAD
+  /* ======================
+     DEBUG PAYLOAD
+  ====================== */
   console.group("📤 CREATE ARTIKEL PAYLOAD");
-  for (const pair of form.entries()) {
-    console.log(pair[0], ":", pair[1]);
+  for (const [key, value] of form.entries()) {
+    console.log(key, "=>", value);
   }
   console.groupEnd();
 
@@ -49,19 +40,22 @@ export const createArtikel = async (data) => {
     });
     return res.data;
   } catch (err) {
-    console.error("❌ CREATE ARTIKEL ERROR", err.response?.data || err);
+    console.group("❌ CREATE ARTIKEL ERROR");
+    console.log("STATUS:", err.response?.status);
+    console.log("MESSAGE:", err.response?.data?.message);
+    console.log("ERRORS:", err.response?.data?.errors);
+    console.log("FULL RESPONSE:", err.response?.data);
+    console.groupEnd();
     throw err;
   }
 };
 
-/* =========================
-   UPDATE
-========================= */
 export const updateArtikel = async (id, data) => {
   const form = new FormData();
 
   form.append("judul", data.judul);
-  form.append("deskripsi", data.deskripsi);
+  form.append("excerpt", data.excerpt);
+  form.append("content", data.content);
   form.append("tanggal_terbit", fixDate(data.tanggal_terbit));
   form.append("url_cta", data.url_cta || "");
 
@@ -69,11 +63,10 @@ export const updateArtikel = async (id, data) => {
     form.append("gambar", data.gambar);
   }
 
-  // DEBUG PAYLOAD
   console.group("📦 UPDATE ARTIKEL PAYLOAD");
   console.log("ID:", id);
-  for (const pair of form.entries()) {
-    console.log(pair[0], ":", pair[1]);
+  for (const [key, value] of form.entries()) {
+    console.log(key, "=>", value);
   }
   console.groupEnd();
 
@@ -83,14 +76,17 @@ export const updateArtikel = async (id, data) => {
     });
     return res.data;
   } catch (err) {
-    console.error("❌ UPDATE ARTIKEL ERROR", err.response?.data || err);
+    console.group("❌ UPDATE ARTIKEL ERROR");
+    console.log("STATUS:", err.response?.status);
+    console.log("MESSAGE:", err.response?.data?.message);
+    console.log("ERRORS:", err.response?.data?.errors);
+    console.log("FULL RESPONSE:", err.response?.data);
+    console.groupEnd();
     throw err;
   }
 };
 
-/* =========================
-   DELETE
-========================= */
+
 export const deleteArtikel = async (id) => {
   const res = await api.delete(`/artikel/${id}`);
   return res.data;

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useArtikel } from "../hooks/useArtikel";
 import { FileText, Edit3, Trash2, Calendar } from "lucide-react";
 import Swal from "sweetalert2";
+import TrixEditor from "../components/TrixEditor";
 
 const ArtikelPage = () => {
   const {
@@ -15,6 +16,8 @@ const ArtikelPage = () => {
     handleUpdate,
     handleDelete,
   } = useArtikel();
+
+  const [openContentId, setOpenContentId] = useState(null);
 
   const confirmDelete = (id, judul) => {
     Swal.fire({
@@ -33,158 +36,176 @@ const ArtikelPage = () => {
     });
   };
 
+  /* ======================
+     PREVIEW TEXT (excerpt -> content)
+  ====================== */
+  const getPreviewText = (excerpt, content, limit = 140) => {
+    if (excerpt && excerpt.trim()) return excerpt;
+    if (!content) return "";
+
+    const temp = document.createElement("div");
+    temp.innerHTML = content;
+    const text = temp.textContent || temp.innerText || "";
+
+    return text.length > limit ? text.slice(0, limit) + "..." : text;
+  };
+
   return (
     <div className="flex flex-col gap-6">
 
-      {/* ===== HEADER ===== */}
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <span className="bg-[#FFBC41] text-white p-2 rounded-xl shadow-lg shadow-orange-200">
-            <FileText className="w-8 h-8 text-gray-100" />
-          </span>
-          Manajemen Artikel
-        </h1>
-      </div>
+      {/* HEADER */}
+      <h1 className="text-3xl font-bold flex items-center gap-2">
+        <span className="bg-[#FFBC41] text-white p-2 rounded-xl">
+          <FileText className="w-8 h-8" />
+        </span>
+        Manajemen Artikel
+      </h1>
 
-      {/* ===== FORM TAMBAH (STYLE SAMA EVENT) ===== */}
-      <div className="bg-white p-6 rounded-xl shadow space-y-4 border border-gray-100">
-        <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-          <span className="w-1 h-6 bg-[#FFBC41] rounded-full"></span>
-          Tambah Artikel
-        </h2>
+      {/* ======================
+         FORM CREATE
+      ====================== */}
+      <div className="bg-white p-6 rounded-xl shadow space-y-4">
+        <h2 className="font-bold text-lg">Tambah Artikel</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input
+          className="input input-bordered w-full"
+          placeholder="Judul Artikel"
+          value={newArtikel.judul}
+          onChange={(e) =>
+            setNewArtikel({ ...newArtikel, judul: e.target.value })
+          }
+        />
 
-          <input
-            className="input input-bordered w-full"
-            placeholder="Judul Artikel"
-            value={newArtikel.judul}
-            onChange={(e) =>
-              setNewArtikel({ ...newArtikel, judul: e.target.value })
-            }
-          />
+        <textarea
+          className="textarea textarea-bordered w-full"
+          rows={2}
+          placeholder="Excerpt / ringkasan artikel"
+          value={newArtikel.excerpt}
+          onChange={(e) =>
+            setNewArtikel({ ...newArtikel, excerpt: e.target.value })
+          }
+        />
 
-          <input
-            type="date"
-            className="input input-bordered w-full"
-            value={newArtikel.tanggal_terbit}
-            onChange={(e) =>
-              setNewArtikel({
-                ...newArtikel,
-                tanggal_terbit: e.target.value,
-              })
-            }
-          />
+        {/* CONTENT (TRIX) */}
+        <TrixEditor
+          initialValue={newArtikel.content}
+          onChange={(html) =>
+            setNewArtikel((prev) => ({ ...prev, content: html }))
+          }
+        />
 
-          <input
-            className="input input-bordered w-full sm:col-span-2"
-            placeholder="URL CTA (https://...)"
-            value={newArtikel.url_cta}
-            onChange={(e) =>
-              setNewArtikel({ ...newArtikel, url_cta: e.target.value })
-            }
-          />
+        <input
+          type="date"
+          className="input input-bordered w-full"
+          value={newArtikel.tanggal_terbit}
+          onChange={(e) =>
+            setNewArtikel({ ...newArtikel, tanggal_terbit: e.target.value })
+          }
+        />
 
-          <textarea
-            className="textarea textarea-bordered w-full sm:col-span-2"
-            rows={3}
-            placeholder="Deskripsi artikel..."
-            value={newArtikel.deskripsi}
-            onChange={(e) =>
-              setNewArtikel({ ...newArtikel, deskripsi: e.target.value })
-            }
-          />
+        <input
+          className="input input-bordered w-full"
+          placeholder="URL CTA (opsional)"
+          value={newArtikel.url_cta}
+          onChange={(e) =>
+            setNewArtikel({ ...newArtikel, url_cta: e.target.value })
+          }
+        />
 
-          <input
-            type="file"
-            className="file-input file-input-bordered w-full sm:col-span-2"
-            onChange={(e) =>
-              setNewArtikel({ ...newArtikel, gambar: e.target.files[0] })
-            }
-          />
-        </div>
+        <input
+          type="file"
+          className="file-input file-input-bordered w-full"
+          onChange={(e) =>
+            setNewArtikel({ ...newArtikel, gambar: e.target.files[0] })
+          }
+        />
 
         <button
-          className="btn bg-[#FFBC41] text-black hover:bg-[#E5A73A] w-full"
+          className="btn bg-[#FFBC41] w-full"
           onClick={handleAdd}
         >
-          + Tambah Artikel
+          Tambah Artikel
         </button>
       </div>
 
-      {/* ===== LIST ARTIKEL (BLOG STYLE, TETAP) ===== */}
-      <div>
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 opacity-50">
-            <span className="loading loading-dots loading-lg text-[#FFBC41]"></span>
-            <p className="text-sm mt-2 font-medium text-gray-400">
-              Memuat data artikel...
-            </p>
-          </div>
-        ) : artikel.length > 0 ? (
-          <div className="space-y-6">
-            {artikel.map((a) => (
-              <article
-                key={a.id}
-                className="group bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all overflow-hidden flex flex-col md:flex-row"
-              >
-                <div className="md:w-72 h-48 overflow-hidden">
-                  <img
-                    src={a.gambar_url}
-                    alt={a.judul}
-                    className="w-full h-full object-cover group-hover:scale-105 transition"
-                  />
-                </div>
+      {/* ======================
+         LIST ARTIKEL
+      ====================== */}
+      {loading ? (
+        <p className="text-gray-400">Memuat...</p>
+      ) : (
+        <div className="space-y-4">
+          {artikel.map((a) => (
+            <article
+              key={a.id}
+              className="bg-white rounded-xl border shadow-sm flex overflow-hidden"
+            >
+              <img
+                src={a.gambar_url}
+                alt={a.judul}
+                className="w-48 object-cover"
+              />
 
-                <div className="p-5 flex flex-col flex-grow">
-                  <div className="flex justify-between items-start gap-4">
-                    <h3 className="font-bold text-xl leading-snug line-clamp-2">
-                      {a.judul}
-                    </h3>
-
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setEditing(a)}
-                        className="bg-white/90 text-gray-700 p-2 rounded-full shadow hover:bg-[#FFBC41] hover:text-white transition"
-                      >
-                        <Edit3 size={16} />
-                      </button>
-                      <button
-                        onClick={() => confirmDelete(a.id, a.judul)}
-                        className="bg-white/90 text-gray-700 p-2 rounded-full shadow hover:bg-red-500 hover:text-white transition"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </div>
-
-                  <p className="text-gray-500 text-sm leading-relaxed line-clamp-3 mt-2">
-                    {a.deskripsi}
-                  </p>
-
-                  <div className="mt-auto pt-4 flex items-center gap-2 text-xs text-gray-400">
-                    <Calendar size={14} />
-                    {new Date(a.tanggal_terbit).toLocaleDateString("id-ID")}
+              <div className="p-4 flex flex-col flex-grow">
+                <div className="flex justify-between">
+                  <h3 className="font-bold text-lg">{a.judul}</h3>
+                  <div className="flex gap-2">
+                    <button onClick={() => setEditing(a)}>
+                      <Edit3 size={16} />
+                    </button>
+                    <button onClick={() => confirmDelete(a.id, a.judul)}>
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="py-12 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
-            <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 font-medium">
-              Belum ada artikel yang dibuat.
-            </p>
-          </div>
-        )}
-      </div>
 
-      {/* ===== MODAL EDIT (TETAP) ===== */}
+                {/* PREVIEW */}
+                <p className="text-sm text-gray-500 mt-2 line-clamp-3">
+                  {getPreviewText(a.excerpt, a.content)}
+                </p>
+
+                {/* TOGGLE CONTENT */}
+                <button
+                  onClick={() =>
+                    setOpenContentId(openContentId === a.id ? null : a.id)
+                  }
+                  className="mt-2 text-xs font-semibold text-[#FFBC41] hover:underline w-fit"
+                >
+                  {openContentId === a.id ? "Tutup Konten" : "Lihat Konten"}
+                </button>
+
+                {/* FULL CONTENT */}
+                {openContentId === a.id && (
+                 <div
+  className="
+    prose prose-sm max-w-none
+    prose-ul:list-disc prose-ol:list-decimal
+    prose-p:my-2
+    whitespace-pre-wrap break-words
+    mt-3 border-t pt-3
+  "
+  dangerouslySetInnerHTML={{ __html: a.content }}
+/>
+
+                )}
+
+                <div className="text-xs text-gray-400 mt-4 flex items-center gap-1">
+                  <Calendar size={12} />
+                  {new Date(a.tanggal_terbit).toLocaleDateString("id-ID")}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {/* ======================
+         MODAL EDIT
+      ====================== */}
       {editing && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg space-y-4">
-            <h2 className="text-xl font-semibold">Edit Artikel</h2>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl w-full max-w-lg space-y-4">
+            <h2 className="font-bold text-lg">Edit Artikel</h2>
 
             <input
               className="input input-bordered w-full"
@@ -196,37 +217,22 @@ const ArtikelPage = () => {
 
             <textarea
               className="textarea textarea-bordered w-full"
-              rows={3}
-              value={editing.deskripsi}
+              value={editing.excerpt}
               onChange={(e) =>
-                setEditing({ ...editing, deskripsi: e.target.value })
+                setEditing({ ...editing, excerpt: e.target.value })
               }
             />
 
-            <input
-              type="date"
-              className="input input-bordered w-full"
-              value={editing.tanggal_terbit?.split("T")[0]}
-              onChange={(e) =>
-                setEditing({
-                  ...editing,
-                  tanggal_terbit: e.target.value,
-                })
-              }
-            />
-
-            <input
-              type="file"
-              className="file-input file-input-bordered w-full"
-              onChange={(e) =>
-                setEditing({ ...editing, gambar: e.target.files[0] })
+            {/* TRIX EDIT MODE (INITIAL VALUE!) */}
+            <TrixEditor
+              initialValue={editing.content}
+              onChange={(html) =>
+                setEditing({ ...editing, content: html })
               }
             />
 
             <div className="flex justify-end gap-2">
-              <button className="btn btn-ghost" onClick={() => setEditing(null)}>
-                Batal
-              </button>
+              <button onClick={() => setEditing(null)}>Batal</button>
               <button className="btn btn-primary" onClick={handleUpdate}>
                 Simpan
               </button>
