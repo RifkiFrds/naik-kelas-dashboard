@@ -7,7 +7,7 @@ import {
 } from "../services/layananBisnisService";
 import { Toast } from "../components/Toast";
 
-// Semua type punya gambar
+// Schema FINAL
 const SCHEMA_FIELDS = {
   trading: [
     "type",
@@ -19,15 +19,13 @@ const SCHEMA_FIELDS = {
   ],
   jasa_recruitment: [
     "type",
-    "judul_bisnis",
     "gambar",
     "deskripsi",
     "fitur_unggulan",
     "url_cta",
   ],
-  modul_bisnis: [
+  modal_bisnis: [
     "type",
-    "judul_bisnis",
     "gambar",
     "deskripsi",
     "fitur_unggulan",
@@ -35,15 +33,6 @@ const SCHEMA_FIELDS = {
   ],
   webinar: [
     "type",
-    "judul_bisnis",
-    "gambar",
-    "deskripsi",
-    "fitur_unggulan",
-    "url_cta",
-  ],
-  workshop: [
-    "type",
-    "judul_bisnis",
     "gambar",
     "deskripsi",
     "fitur_unggulan",
@@ -58,7 +47,7 @@ export const useLayananBisnis = () => {
 
   const [newLayanan, setNewLayanan] = useState({
     type: "",
-    judul_bisnis: "",
+    tipe_broker: "",
     gambar: null,
     deskripsi: "",
     fitur_unggulan: "",
@@ -80,7 +69,7 @@ export const useLayananBisnis = () => {
       setFiltered(
         layanan.filter(
           (item) =>
-            item.judul_bisnis?.toLowerCase().includes(q) ||
+            item.tipe_broker?.toLowerCase().includes(q) ||
             item.deskripsi?.toLowerCase().includes(q) ||
             item.type?.toLowerCase().includes(q)
         )
@@ -95,27 +84,28 @@ export const useLayananBisnis = () => {
       const data = await getLayananBisnis();
       setLayanan(data);
       setFiltered(data);
-    } catch (err) {
+    } catch {
       Toast.error("Gagal memuat layanan ❌");
     } finally {
       setLoading(false);
     }
   };
 
-  // utility builder: selalu FormData
+  // builder FormData
   const buildPayload = (data) => {
     const fields = SCHEMA_FIELDS[data.type];
     if (!fields) return data;
 
     const formData = new FormData();
     fields.forEach((key) => {
-      if (data[key] !== undefined && data[key] !== null && data[key] !== "") {
+      const value = data[key];
+      if (value !== undefined && value !== null && value !== "") {
         if (key === "gambar") {
-          if (data[key] instanceof File) {
-            formData.append("gambar", data[key]);
+          if (value instanceof File) {
+            formData.append("gambar", value);
           }
         } else {
-          formData.append(key, data[key]);
+          formData.append(key, value);
         }
       }
     });
@@ -127,31 +117,38 @@ export const useLayananBisnis = () => {
   const handleAdd = async () => {
     try {
       if (!newLayanan.type) {
-        Toast.error("Pilih Type layanan terlebih dahulu!");
+        Toast.error("Pilih type layanan terlebih dahulu!");
         return;
       }
 
       for (let key of SCHEMA_FIELDS[newLayanan.type]) {
-        if (!newLayanan[key]) {
+        const value = newLayanan[key];
+        if (value === undefined || value === null || value === "") {
           Toast.error(`Field ${key} wajib diisi!`);
           return;
         }
       }
 
       const payload = buildPayload(newLayanan);
+
+      // DEBUG (hapus setelah yakin)
+      console.log("CREATE PAYLOAD:", [...payload.entries()]);
+
       await createLayananBisnis(payload);
 
       Toast.success("Layanan bisnis berhasil ditambahkan 🎉");
       setNewLayanan({
         type: "",
-        judul_bisnis: "",
+        tipe_broker: "",
         gambar: null,
         deskripsi: "",
         fitur_unggulan: "",
         url_cta: "",
       });
+
       loadLayanan();
     } catch (err) {
+      console.error(err);
       Toast.error("Gagal menambah layanan bisnis ❌");
     }
   };
@@ -175,7 +172,7 @@ export const useLayananBisnis = () => {
     try {
       await deleteLayananBisnis(id);
       loadLayanan();
-    } catch (err) {
+    } catch {
       Toast.error("Gagal menghapus layanan bisnis ❌");
     }
   };
